@@ -15,8 +15,8 @@ print(args)
 
 p = Path(args.path_to_file_or_directory)
 
-extern_c_start = "#if defined __cplusplus" + os.linesep +"extern \"C\"" + os.linesep + "{" + os.linesep + "#endif" + os.linesep
-extern_c_end = os.linesep + "#if defined __cplusplus" + os.linesep + "}" + os.linesep + "#endif" + os.linesep
+extern_c_start = "#if defined __cplusplus" + os.linesep +"extern \"C\"" + os.linesep + "{" + os.linesep + "#endif" + os.linesep + os.linesep
+extern_c_end = os.linesep + os.linesep + "#if defined __cplusplus" + os.linesep + "}" + os.linesep + "#endif" + os.linesep
 
 def insert_extern_c(fp):
     tmp_fp = fp.with_name(fp.name + "_tmp")
