@@ -7,6 +7,7 @@ import os
 parser = argparse.ArgumentParser("Extern C-er", description="This tool wraps the detected files with C++ extern C")
 parser.add_argument("path_to_file_or_directory")
 parser.add_argument("-c", "--commit", dest="commit", default=False, action=argparse.BooleanOptionalAction, help="When commit is present, the script commits it's changes. Otherwise it's a dry run.")
+parser.add_argument("-e", "--exts", dest="exts", default=".h", help="Comma separated string containing exts... (i.e. \".h,.c\")")
 
 args = parser.parse_args()
 
@@ -33,7 +34,7 @@ def insert_extern_c(fp):
             tmp_f.close()
 
 def process_file(fp, tab_count):
-    if fp.suffix == ".h" or fp.suffix == ".c":
+    if len(fp.suffix) > 0 and fp.suffix in args.exts:
         # tabs = "".join(['\t' for _ in range(tab_count)])
         # print(tabs, end="")
         print(fp)
