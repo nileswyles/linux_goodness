@@ -52,4 +52,8 @@ def recurse_dirs(p, tab_count):
         else:
             process_file(sub_p, tab_count=tab_count)
 
-recurse_dirs(p, 0)
+if p.is_dir():
+    recurse_dirs(p, 0)
+else:
+    process_file(p, tab_count=0)
+
