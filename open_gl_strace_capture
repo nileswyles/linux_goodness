@@ -1,6 +1,0 @@
-#!/bin/bash
-
-CAPTURE_FILE_PATH=$1
-
-timeout 10 strace --trace=network,ipc --raw=network,ipc -o /tmp/trace.cap glxgears -info
-sed -E '/EAGAIN|ENOENT/d' /tmp/trace.cap > $CAPTURE_FILE_PATH
