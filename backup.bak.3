@@ -1,0 +1,13 @@
+#!/bin/bash
+
+BACKUP_DIR=$1
+BACKUP_FILE=`date -I'minutes'`.tar.gz
+CMD='tar czvf '$BACKUP_DIR'/'$BACKUP_FILE' -C / --exclude-ignore-recursive=/proc --exclude-ignore-recursive=/sys --exclude-from=/dev --exclude-from=/media --exclude-from=/mnt --exclude-from=/tmp --exclude-from=/var/cache --exclude-from='$BACKUP_DIR'} --exclude-backups --exclude-vcs --exclude-caches .'
+
+echo '-------------'
+echo 'PERFORMING BACKUP...'
+echo $CMD
+echo '-------------'
+echo ''
+
+exec $CMD

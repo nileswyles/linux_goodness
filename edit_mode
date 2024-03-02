@@ -1,0 +1,5 @@
+#!/bin/bash
+
+### Usage:
+### $1 is first terminal argument and should be either enable or disable.
+systemctl $1 debug-shell.service

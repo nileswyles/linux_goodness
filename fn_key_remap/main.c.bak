@@ -1,0 +1,70 @@
+#include <libinput.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <libudev.h>
+#include <errno.h>
+
+static int open_restricted(const char *path, int flags, void *user_data) {
+  int fd = open(path, flags);
+  printf("opening device (%d) at path: %s, with flags %d\n", fd, path, flags);
+  return fd < 0 ? -errno : fd;
+}
+
+static void close_restricted(int fd, void *user_data) {
+  printf("closing device with fd: %d\n", fd);
+  close(fd);
+}
+
+static struct libinput_interface interface = {
+  .open_restricted = open_restricted,
+  .close_restricted = close_restricted,
+};
+
+
+int main(void) {
+
+  struct libinput *li;
+  struct libinput_event *event;
+  struct udev * udev_ptr;
+  struct udev_enumerate * enumerate;
+
+  udev_ptr = udev_new();
+  enumerate = udev_enumerate_new(udev_ptr);
+
+
+
+ //li = libinput_udev_create_context(&interface, NULL, udev_ptr);
+  libinput_udev_assign_seat(li, "seat0");w
+
+  libinput_dispatch(li);
+
+  //while (1)
+  int fd = -1;
+  while((event = libinput_get_event(li)) != NULL) {
+    enum libinput_event_type type = libinput_event_get_type(event);
+    printf ("event found, type: %u\n", type);
+    if (libinput_event_get_type(event) == LIBINPUT_EVENT_KEYBOARD_KEY) {
+      struct libinput_event_keyboard * key_event = libinput_event_get_keyboard_event(event);
+      if (libinput_event_keyboard_get_key_state(key_event) == LIBINPUT_KEY_STATE_PRESSED) {
+        printf("KEY_PRESSED: %u\n", libinput_event_keyboard_get_key(key_event));
+      }
+    } else if (libinput_event_get_type(event) == LIBINPUT_EVENT_DEVICE_ADDED) {
+      struct libinput_device * device = libinput_event_get_device(event);
+      char * name = libinput_device_get_name(device);
+      printf("Device added: %s\n", name);
+      if (strcmp("Apple SPI Keyboard", name) == 0) {
+        
+        
+      }
+    }
+
+    libinput_event_destroy(event);
+    libinput_dispatch(li);
+  }
+ // }
+  
+  return 0;
+}
+
+

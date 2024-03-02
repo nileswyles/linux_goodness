@@ -1,0 +1,6 @@
+#!/bin/bash
+
+BACKUP_DIR=$1
+BACKUP_FILE=`date -I'minutes'`.tar.gz
+
+tar czvf --exclude='/proc' --exclude='/sys' --exclude='/dev' --exclude='/media' --exclude='/mnt' --exclude='/tmp' --exclude='$BACKUP_DIR' $BACKUP_DIR/$BACKUP_FILE /

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+BACKUP_DIR=$1
+BACKUP_FILE=`date "+%Y%m%dT%H%M"`.tar.gz
+CMD="tar -C / --exclude='./proc' --exclude='./sys' --exclude='./dev' --exclude='./media' --exclude='./mnt' --exclude='./tmp/*' --exclude='*cache*' --exclude='./home' --exclude='./var/log' --exclude='."$BACKUP_DIR"' --exclude-backups --exclude-vcs --exclude-caches -cvzf "$BACKUP_DIR"/"$BACKUP_FILE" ."
+
+echo '-------------'
+echo 'PERFORMING BACKUP...'
+echo $CMD
+echo '-------------'
+echo ''
+
+exec $CMD
