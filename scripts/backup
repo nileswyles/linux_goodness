@@ -1,8 +1,9 @@
 #!/bin/bash
 
 BACKUP_DIR=$1
+ROOT_DIR=$2
 BACKUP_FILE=`date "+%Y%m%dT%H%M"`.tar.gz
-CMD="tar -C / --exclude='./proc' --exclude='./sys' --exclude='./dev' --exclude='./media' --exclude='./mnt' --exclude='./tmp/*' --exclude='*cache*' --exclude='./home' --exclude='./var/log' --exclude='."$BACKUP_DIR"' --exclude-backups --exclude-vcs --exclude-caches -cvzf "$BACKUP_DIR"/"$BACKUP_FILE" ."
+CMD="tar -C "$ROOT_DIR" --exclude='./proc' --exclude='./sys' --exclude='./dev' --exclude='./media' --exclude='./mnt' --exclude='tmp' --exclude='*cache*' --exclude='./home' --exclude='./var/log' --exclude='."$BACKUP_DIR"' --exclude-backups --exclude-vcs --exclude-caches -cvzf "$BACKUP_DIR"/"$BACKUP_FILE" boot/ usr/ lib*/ bin/ var/ etc/ opt/ /sbin README"
 
 echo '-------------'
 echo 'PERFORMING BACKUP...'
