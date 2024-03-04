@@ -1,0 +1,21 @@
+#!/bin/perl
+use strict;
+use warnings;
+
+my ($URL, $DIRECTORY) = @ARGV;
+
+if (not defined $URL) {
+  die "PLEASE SPECIFY REMOTE URL";
+}
+
+if (defined $DIRECTORY) {
+  `cd $DIRECTORY`;
+}
+
+`mkdir .git`;
+`git init`;
+`git config --global --add safe.directory $DIRECTORY`;
+`git remote add origin $URL`;
+`git fetch`;
+`git reset --hard origin/main`;
+`./scripts/git_misc/git_group_add`;
