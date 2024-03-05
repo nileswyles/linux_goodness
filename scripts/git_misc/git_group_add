@@ -4,16 +4,20 @@ use warnings;
 
 my ($DIRECTORY) = @ARGV;
 
-my $CMD = "";
 
-if (defined $DIRECTORY) {
-  $CMD = "cd $DIRECTORY;";
-} 
+my $GIT_TREE = `git ls-tree --full-tree --name-only -r HEAD`;
 
-my $GIT_TREE = "git ls-tree --full-tree --name-only -r HEAD";
+my @FILES = split(/\n/, $GIT_TREE); # split result by line...
 
-$CMD .= "$GIT_TREE|xargs sudo chgrp git;".
-  "$GIT_TREE|xargs sudo chmod g+w;".
-  "$GIT_TREE|xargs sudo chmod g+x";
+foreach (@FILES) {
+  my $cmd = "";
+  if (defined $DIRECTORY) {
+    $cmd = "cd $DIRECTORY;";
+  } 
+  $cmd .= "sudo chgrp git $_;".
+    "sudo chmod g+w $_;".
+    "sudo chmod g+x $_";
+  `$cmd`;
+}
 
-`$CMD`;
+
