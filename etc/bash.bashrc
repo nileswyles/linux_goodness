@@ -7,8 +7,6 @@
 
 [[ $DISPLAY ]] && shopt -s checkwinsize
 
-PS1='[\u@\h \W]\$ '
-
 case ${TERM} in
   Eterm*|alacritty*|aterm*|foot*|gnome*|konsole*|kterm*|putty*|rxvt*|tmux*|xterm*)
     PROMPT_COMMAND+=('printf "\033]0;%s@%s:%s\007" "${USER}" "${HOSTNAME%%.*}" "${PWD/#$HOME/\~}"')
@@ -22,3 +20,17 @@ esac
 if [[ -r /usr/share/bash-completion/bash_completion ]]; then
   . /usr/share/bash-completion/bash_completion
 fi
+
+#
+# Edits start here
+#
+
+PS1='[\u@\h \W]\$ '
+
+[[ $- != *i* ]] && return
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias ll='ls -la --color=auto'
+
+PATH=$PATH:/scripts:/scripts/git_misc
