@@ -1,0 +1,5 @@
+#!/bin/bash
+
+CMD="ip link set "$1" down"
+echo "$CMD"
+exec $CMD

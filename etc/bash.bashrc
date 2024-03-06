@@ -33,4 +33,4 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias ll='ls -la --color=auto'
 
-PATH=$PATH:/scripts:/scripts/git_misc
+PATH=$PATH:/scripts:/scripts/git_misc:/scripts/vm:/scripts/net

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+qemu-system-x86_64 \
+	-enable-kvm \
+	-cpu host \
+	-m 16G \
+	-name "Ubuntu" \
+	-vga std \
+	-cdrom /home/floxnard7/Downloads/ubuntu-23.10.1-desktop-amd64.iso \
+	-drive file=ubuntu.cow,format=qcow2 \
+	-device vfio-pci,host=01:00.0 \
+	-device vfio-pci,host=01:00.1 \
+	-hda /dev/sda1 \
+	-hdb /dev/sda2 \
+	-hdc /dev/sda3 \
+	-hdd /dev/sda4 \
+	$@

@@ -1,0 +1,7 @@
+#!/bin/perl
+
+my ($INTERFACE, $BRIDGE) = @ARGV;
+
+`ip tuntap add dev $INTERFACE mode tap`;
+`ip link set dev $INTERFACE master $BRIDGE`;
+`ip link set $INTERFACE up`;
