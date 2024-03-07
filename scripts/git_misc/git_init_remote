@@ -8,18 +8,19 @@ if (not defined $URL) {
   die "PLEASE SPECIFY REMOTE URL";
 }
 
-my $CMD = "";
-if (defined $DIRECTORY) {
-  $CMD = "cd $DIRECTORY;";
+if (not defined $DIRECTORY) {
+  $DIRECTORY = "/";
 }
 
-$CMD .= "mkdir .git;".
+my $CMD = "cd $DIRECTORY;". 
+"mkdir .git;".
 "git init;".
 "git config --global --add safe.directory $DIRECTORY;".
 "git remote add origin $URL;".
 "git fetch;".
 "git reset --hard origin/main;".
 "git branch -m main;".
+"chgrp -R git .git;".
 "./scripts/git_misc/git_group_add";
 
 `$CMD`;
