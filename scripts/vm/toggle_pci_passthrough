@@ -1,0 +1,56 @@
+#!/bin/perl
+
+my ($SWITCH) = @ARGV;
+
+print("Argument: $SWITCH\n");
+
+my $CMD_ENABLE_PASSTHROUGH= "modprobe -r nvidia_uvm; \\\n". 
+	"modprobe -r nvidia_drm; \\\n". 
+	"modprobe -r nvidia_modeset; \\\n".
+	"modprobe -r nvidia; \\\n".
+	"modprobe vfio_pci; \\\n".
+	"modprobe vfio_iommu_type1; \\\n".
+	"modprobe vfio";
+my $CMD_DISABLE_PASSTHROUGH = "modprobe -r vfio_pci; \\\n".
+	"modprobe -r vfio_iommu_type1; \\\n". 
+	"modprobe -r vfio; \\\n".
+	"modprobe nvidia_uvm; \\\n". 
+	"modprobe nvidia_drm; \\\n". 
+	"modprobe nvidia_modeset; \\\n".
+	"modprobe nvidia";
+
+sub toggle {
+	my ($arg) = @_;
+	print("Executing the following: \n");
+	print("$arg\n");
+	system($arg) == 0 or exit $?;
+	print("\nModules: \n");
+	# lol
+	my $stdout = `lsmod | grep vfio`;
+	print("$stdout\n");
+	$stdout = `lsmod | grep nvidia`;
+	print("$stdout\n");
+}
+
+if ($SWITCH eq "-on") {
+	# nvidia_drm in use? lol
+	# i3-save-workspace belongs here too. (potentially handled by some lightdm stop script)
+	system("systemctl stop lightdm");
+	toggle($CMD_ENABLE_PASSTHROUGH);
+	system("systemctl start lightdm");
+} elsif ($SWITCH eq "-off") {
+	toggle($CMD_DISABLE_PASSTHROUGH);
+} else {
+	exit 27;
+}
+
+#	my @modules = split("\n", `lsmod`);
+#	foreach (@modules) {
+#	
+#		if ($_ =~ /(.*)vfio(.*)/) {
+#		
+#		} elsif ($_ =~ /(.*)nvidia(.*)/) {
+#			$_
+#		
+#		}
+#}

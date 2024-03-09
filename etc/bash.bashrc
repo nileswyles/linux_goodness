@@ -32,5 +32,9 @@ PS1='[\u@\h \W]\$ '
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias ll='ls -la --color=auto'
+alias p='echo $PATH | tr ":" "\n"'
 
-PATH=$PATH:/scripts:/scripts/git_misc:/scripts/vm:/scripts/net
+PATH=$PATH:/scripts
+
+HISTFILE=5000
+HISTFILESIZE=10000

@@ -1,0 +1,4 @@
+XTerm.vt100.selectToClipboard: true
+XTerm.vt100.saveLines: 4096
+XTerm.vt100.reverseVideo: true
+XTerm.vt100.faceName: Liberation Mono:size=12:antialias=true

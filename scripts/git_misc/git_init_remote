@@ -22,4 +22,4 @@ $CMD .= "mkdir .git;".
 "git branch -m main;".
 "./scripts/git_misc/git_group_add";
 
-`$CMD`;
+system($CMD) == 0 or exit $?;

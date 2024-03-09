@@ -1,0 +1,37 @@
+#!/bin/perl
+
+# initialize taptun interface
+`tap-ifup tap0 br0`;
+
+my $CMD = "qemu-system-x86_64 \\\n".
+	"\t-enable-kvm \\\n".
+	"\t-cpu host \\\n".
+	"\t-m 16G \\\n".
+	"\t-machine q35 \\\n".
+	"\t-name \"Windows Gaming\" \\\n".
+	"\t-smp cores=2 \\\n".
+	"\t-boot order=c,menu=on,strict=on \\\n".
+	"\t-smbios type=0,uefi=on \\\n".
+	"\t-device virtio-vga \\\n".
+	"\t-netdev tap,id=nd0,ifname=tap0,script=no,downscript=no \\\n".
+	"\t-device e1000,netdev=nd0 \\\n".
+	"\t-drive file=/dev/sda,index=0,media=disk,if=ide,format=raw \\\n";
+	"\t-usb \\\n".
+	"\t-device usb-host,vendorid=0x045e,productid=0x02dd";
+
+if ($#ARGV > 0) {
+	$CMD .= "\\\n";
+	if ($ARGV[0] eq "-v") {
+		$CMD .= "\t-device vfio-pci,host=01:00.0 \\\n".
+		"\t-device vfio-pci,host=01:00.1 \\\n".
+		"\t".join(" ", @ARGV[1..$#ARGV]);
+	} else {
+		$CMD .= "\t".join(" ", @ARGV);
+	}
+} 
+
+print("Launching: \n");
+print("$CMD\n");
+system($CMD) == 0 or exit $?;
+
+#"\t-drive file=/storage/vm/windows_gaming.cow, format=qcow2 \\\n".

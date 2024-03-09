@@ -18,16 +18,19 @@ my $CMD = "qemu-system-x86_64 \\\n".
 	"\t-vga virtio \\\n".
 	"\t-netdev tap,id=nd0,ifname=tap1,script=no,downscript=no \\\n".
 	"\t-device e1000,netdev=nd0 \\\n".
-	"\t-drive file=ubuntu.cow,format=qcow2 \\\n";
+	"\t-drive file=/storage/vm/ubuntu.cow,format=qcow2";
 
-if ($ARGV[0] == "-v") {
-	$CMD.="\t-device vfio-pci,host=01:00.0 \\\n".
-	"\t-device vfio-pci,host=01:00.1 \\\n". 
-	"\t".join(" ",@ARGV[1..$#ARGV]);
-} else {
-	$CMD.="\t".join(" ",@ARGV);
+if ($#ARGV > 0) {
+	$CMD .= "\\\n";
+	if ($ARGV[0] eq "-v") {
+		$CMD .= "\t-device vfio-pci,host=01:00.0 \\\n".
+		"\t-device vfio-pci,host=01:00.1 \\\n". 
+		"\t".join(" ",@ARGV[1..$#ARGV]);
+	} elsif ($#ARGV > 0) {
+		$CMD .= "\t".join(" ",@ARGV);
+	}
 }
 
 print("Launching: \n");
 print("$CMD\n");
-exec $CMD;
+system($CMD) == 0 or exit $?;

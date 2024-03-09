@@ -1,0 +1,59 @@
+#!/bin/perl -I/scripts/perl_modules
+# -I<path to folder> defines where to look for modules (in addition to /usr/lib/perl/*_perl, in linux)
+#
+# https://perldoc.perl.org/perlref
+# https://perldoc.perl.org/perldsc (and more)
+#
+
+# good practice, for example error thrown if my not used even on GLOBAL variables and accidental deref.
+#	details not needed rn, just do as they say. might pay off in future.
+use v5.38.2;
+use strict; 
+use warnings;
+
+my $GLOBAL_VARIABLE = "GLOBAL_VARIABLE";
+print($GLOBAL_VARIABLE, "\n");
+
+sub method {
+	# Illustrates Function parameters and Array "expansion" feature (is that what it's called?).
+	my ($arg) = @_;
+
+	print($arg, "\n");
+
+	my $scoped_variable = "scoped_variable";
+	print($scoped_variable, "\n");
+
+	return (1, "2", 3); # Illustrates return (supports multiple values, array (ref?))...
+}
+
+# PERL has special variables, just use reference docs for how that's defined lol.
+#
+# @ARGV (cli argument array) apparently handles quoted params properly? Go figure.
+
+# empty array @arr = ()
+# add with push,pop(,etc) methods
+my @arr = method("arg");
+foreach (@arr) {
+	print($_, ",");
+}
+print("\n");
+
+# empty hash @hash = {}
+my %hash = ("key1"=>"value", "key2"=>2, 1=>"value2");
+print("{\n");
+foreach (keys %hash) {
+	print($_,":",$hash{$_},"\n");
+
+}
+print("}\n");
+
+# TODO: hash/array refs/return values?
+
+# perl also supports other loop types, and how can you forget regex (=~) syntax... and boolean type is "C-similar"
+if (0) {
+	print("IF NO\n");
+} elsif (1) {
+	print("IF YES\n");
+} else {
+	print("IF NO\n");
+}

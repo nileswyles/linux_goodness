@@ -2,6 +2,6 @@
 
 my ($INTERFACE, $BRIDGE) = @ARGV;
 
-`ip tuntap add dev $INTERFACE mode tap`;
-`ip link set dev $INTERFACE master $BRIDGE`;
-`ip link set $INTERFACE up`;
+system("ip tuntap add dev $INTERFACE mode tap");
+system("ip link set dev $INTERFACE master $BRIDGE");
+system("ip link set $INTERFACE up") == 0 or exit $?;
