@@ -21,6 +21,7 @@ my $CMD = "cd $DIRECTORY;".
 "git reset --hard origin/main;".
 "git branch -m main;".
 "chgrp -R git .git;".
+"chmod -R g+w .git;".
 "./scripts/git_misc/git_group_add";
 
 system($CMD) == 0 or exit $?;
