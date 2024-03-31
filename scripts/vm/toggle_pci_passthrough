@@ -26,27 +26,20 @@ sub printDriverState {
 	system("ls -la /sys/bus/pci/drivers/$AUDIO_DRIVER_NAME");
 }
 
-print("Configuring drivers: \n");
+print("Configuring drivers... \n");
 if ($SWITCH eq "-off") {
 	# unbind vfio video driver
 	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $VFIO_DRIVER_NAME, "unbind");
 
 	# unbind vfio audio driver
-	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $VFIO_DRIVER_NAME, "unbind");
-	my $CMD_UNBIND_VIDEO_AUDIO = "echo $DEVICE_ID_VIDEO_AUDIO > /sys/bus/pci/drivers/$VFIO_DRIVER_NAME/unbind";
-	print($CMD_UNBIND_VIDEO_AUDIO."\n");
-	system($CMD_UNBIND_VIDEO_AUDIO);
+	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO_AUDIO, $VFIO_DRIVER_NAME, "unbind");
 
 	# bind snd_hda_intel audio driver
-	my $CMD_BIND_VIDEO_AUDIO = "echo $DEVICE_ID_VIDEO_AUDIO > /sys/bus/pci/drivers/$AUDIO_DRIVER_NAME/unbind";
-	print($CMD_BIND_VIDEO_AUDIO."\n");
-	system($CMD_BIND_VIDEO_AUDIO);
+	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO_AUDIO, $AUDIO_DRIVER_NAME, "bind");
 
 	# if nvidia kernel module not loaded, modprobe... else bind nvidia video driver.
 	if (`lsmod` =~ /$NVIDIA_DRIVER_NAME.*/) { # NVIDIA MODULE LOADED
-		my $CMD_BIND = "echo $DEVICE_ID_VIDEO > /sys/bus/pci/drivers/$NVIDIA_DRIVER_NAME/bind";
-		print($CMD_BIND."\n");
-		system($CMD_BIND);
+		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $NVIDIA_DRIVER_NAME, "bind");
 	} else {
 		#my $CMD_ENABLE_NVIDIA = "modprobe nvidia_uvm; \\\n".
 		#	"modprobe nvidia_drm; \\\n". 
@@ -57,31 +50,24 @@ if ($SWITCH eq "-off") {
 		system($CMD_ENABLE_NVIDIA);
 		print("ATTENTION! NVIDIA driver enabled... please restart the Display Manager?.\n");
 	}
-	print("Toggled $DEVICE_ID_VIDEO to $BIND_DRIVER_NAME\n");
-	print("Toggled $DEVICE_ID_VIDEO_AUDIO to snd_hda_intel\n");
+	print("Toggled $DEVICE_ID_VIDEO to $NVIDIA_DRIVER_NAME\n");
+	print("Toggled $DEVICE_ID_VIDEO_AUDIO to $AUDIO_DRIVER_NAME\n");
 } elsif ($SWITCH eq "-on") {
 	# unbind nvidia video driver
-	my $CMD_UNBIND = "echo $DEVICE_ID_VIDEO > /sys/bus/pci/drivers/$NVIDIA_DRIVER_NAME/unbind";
-	print($CMD_UNBIND."\n");
-	system($CMD_UNBIND);
+	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $NVIDIA_DRIVER_NAME, "unbind");
 
 	# unbind snd_hda_intel audio driver
-	my $CMD_UNBIND_VIDEO_AUDIO = "echo $DEVICE_ID_VIDEO_AUDIO > /sys/bus/pci/drivers/snd_hda_intel/unbind";
-	print($CMD_UNBIND_VIDEO_AUDIO."\n");
-	system($CMD_UNBIND_VIDEO_AUDIO);
+	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO_AUDIO, $AUDIO_DRIVER_NAME, "unbind");
 
 	# bind VFIO audio
-	my $CMD_BIND_VIDEO_AUDIO = "echo $DEVICE_ID_VIDEO_AUDIO > /sys/bus/pci/drivers/$BIND_DRIVER_NAME/bind";
-	print($CMD_BIND_VIDEO_AUDIO."\n");
-	system($CMD_BIND_VIDEO_AUDIO);
+	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO_AUDIO, $VFIO_DRIVER_NAME, "bind");
 
 	# bind VFIO video
-	print($CMD_BIND."\n");
-	system($CMD_BIND);
-	print("Toggled $DEVICE_ID_VIDEO to $BIND_DRIVER_NAME\n");
-	print("Toggled $DEVICE_ID_VIDEO_AUDIO to $BIND_DRIVER_NAME\n");
+	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $VFIO_DRIVER_NAME, "bind");
+	print("Toggled $DEVICE_ID_VIDEO to $VFIO_DRIVER_NAME\n");
+	print("Toggled $DEVICE_ID_VIDEO_AUDIO to $VFIO_DRIVER_NAME\n");
 } else {
-	print("User did not provide a valid options, printing current state: \n\n");
+	print("User did not provide any valid options, printing current state: \n\n");
 }
 
 printDriverState();
