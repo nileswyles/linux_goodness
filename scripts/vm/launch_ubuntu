@@ -1,5 +1,7 @@
 #!/bin/perl
 
+# TODO:
+# ADD interface arg to this script... and do this separately
 # initialize taptun interface
 `tap-ifup tap1 br0`;
 
@@ -20,7 +22,7 @@ my $CMD = "qemu-system-x86_64 \\\n".
 	"\t-device e1000,netdev=nd0 \\\n".
 	"\t-drive file=/storage/vm/ubuntu.cow,format=qcow2";
 
-if ($#ARGV > 0) {
+if (length(@ARGV) > 0) {
 	$CMD .= "\\\n";
 	if ($ARGV[0] eq "-v") {
 		$CMD .= "\t-device vfio-pci,host=01:00.0 \\\n".

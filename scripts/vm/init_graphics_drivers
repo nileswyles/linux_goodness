@@ -1,0 +1,18 @@
+#!/bin/perl
+
+my $CMD_ENABLE_PASSTHROUGH = "modprobe vfio_pci; \\\n".
+	"modprobe vfio_iommu_type1; \\\n".
+	"modprobe vfio";
+my $CMD_ENABLE_NVIDIA = "modprobe nvidia-uvm; \\\n modprobe nvidia-drm; \\\n modprobe nvidia-modeset; \\\n modprobe nvidia";
+
+my $DEVICE_ID = "0000:01:00.0";
+my $DRIVER_NAME = "vfio-pci";
+#my $DRIVER_NAME = "nvidia";
+my $CMD_UNBIND = "echo $DEVICE_ID > /sys/bus/pci/drivers/$DRIVER_NAME/unbind";
+my $CMD_BIND = "echo $DEVICE_ID > /sys/bus/pci/drivers/$DRIVER_NAME/bind";
+
+system($CMD_ENABLE_PASSTHROUGH); # For shits and giggles?
+#system($CMD_ENABLE_NVIDIA);
+system($CMD_UNBIND);
+system($CMD_ENABLE_NVIDIA);
+#system($CMD_ENABLE_PASSTHROUGH); # For shits and giggles?

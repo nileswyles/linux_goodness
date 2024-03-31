@@ -2,55 +2,63 @@
 
 my ($SWITCH) = @ARGV;
 
-print("Argument: $SWITCH\n");
+my $DEVICE_ID = "0000:01:00.0";
+my $DEVICE_ID_2 = "0000:01:00.1";
 
-my $CMD_ENABLE_PASSTHROUGH= "modprobe -r nvidia_uvm; \\\n". 
-	"modprobe -r nvidia_drm; \\\n". 
-	"modprobe -r nvidia_modeset; \\\n".
-	"modprobe -r nvidia; \\\n".
-	"modprobe vfio_pci; \\\n".
-	"modprobe vfio_iommu_type1; \\\n".
-	"modprobe vfio";
-my $CMD_DISABLE_PASSTHROUGH = "modprobe -r vfio_pci; \\\n".
-	"modprobe -r vfio_iommu_type1; \\\n". 
-	"modprobe -r vfio; \\\n".
-	"modprobe nvidia_uvm; \\\n". 
-	"modprobe nvidia_drm; \\\n". 
-	"modprobe nvidia_modeset; \\\n".
-	"modprobe nvidia";
-
-sub toggle {
-	my ($arg) = @_;
-	print("Executing the following: \n");
-	print("$arg\n");
-	system($arg) == 0 or exit $?;
-	print("\nModules: \n");
-	# lol
-	my $stdout = `lsmod | grep vfio`;
-	print("$stdout\n");
-	$stdout = `lsmod | grep nvidia`;
-	print("$stdout\n");
-}
+my $VFIO_DRIVER_NAME = "vfio-pci";
+#my $NVIDIA_DRIVER_NAME = "nvidia";
+my $NVIDIA_DRIVER_NAME = "nouveau";
 
 if ($SWITCH eq "-on") {
-	# nvidia_drm in use? lol
-	# i3-save-workspace belongs here too. (potentially handled by some lightdm stop script)
-	system("systemctl stop lightdm");
-	toggle($CMD_ENABLE_PASSTHROUGH);
-	system("systemctl start lightdm");
+	$UNBIND_DRIVER_NAME = $NVIDIA_DRIVER_NAME;
+	$BIND_DRIVER_NAME = $VFIO_DRIVER_NAME;
 } elsif ($SWITCH eq "-off") {
-	toggle($CMD_DISABLE_PASSTHROUGH);
+	$UNBIND_DRIVER_NAME = $VFIO_DRIVER_NAME;
+	$BIND_DRIVER_NAME = $NVIDIA_DRIVER_NAME;
 } else {
+	print("User did not provide a valid options, printing current state: \n\n");
+	print("VFIO driver: \n");
+	system("ls -la /sys/bus/pci/drivers/$VFIO_DRIVER_NAME");
+	print("\nNVIDIA driver: \n");
+	system("ls -la /sys/bus/pci/drivers/$NVIDIA_DRIVER_NAME");
 	exit 27;
 }
 
-#	my @modules = split("\n", `lsmod`);
-#	foreach (@modules) {
-#	
-#		if ($_ =~ /(.*)vfio(.*)/) {
-#		
-#		} elsif ($_ =~ /(.*)nvidia(.*)/) {
-#			$_
-#		
-#		}
-#}
+my $CMD_UNBIND = "echo $DEVICE_ID > /sys/bus/pci/drivers/$UNBIND_DRIVER_NAME/unbind";
+my $CMD_BIND = "echo $DEVICE_ID > /sys/bus/pci/drivers/$BIND_DRIVER_NAME/bind";
+
+print("Executing the following: \n");
+print($CMD_UNBIND."\n");
+system($CMD_UNBIND);
+
+# ehhhh
+if ($SWITCH eq "-off") {
+	my $CMD_UNBIND_2 = "echo $DEVICE_ID_2 > /sys/bus/pci/drivers/$UNBIND_DRIVER_NAME/unbind";
+	print($CMD_UNBIND_2."\n");
+	system($CMD_UNBIND_2);
+	if (`lsmod` =~ /$NVIDIA_DRIVER_NAME.*/) { # NVIDIA MODULE LOADED
+		print($CMD_BIND."\n");
+		system($CMD_BIND);
+	} else {
+		#my $CMD_ENABLE_NVIDIA = "modprobe nvidia_uvm; \\\n".
+		#	"modprobe nvidia_drm; \\\n". 
+		#		"modprobe nvidia-modeset; \\\n".
+		#		"modprobe nvidia";
+		my $CMD_ENABLE_NVIDIA = "modprobe noveau";
+		print($CMD_ENABLE_NVIDIA."\n");
+		system($CMD_ENABLE_NVIDIA);
+		print("ATTENTION! NVIDIA driver enabled... please restart the Display Manager?.\n");
+	}
+	print("Toggled $DEVICE_ID to $BIND_DRIVER_NAME\n");
+	system("ls -la /sys/bus/pci/drivers/$BIND_DRIVER_NAME");
+} else  {
+	print($CMD_BIND."\n");
+	system($CMD_BIND);
+
+	my $CMD_BIND_2 = "echo $DEVICE_ID_2 > /sys/bus/pci/drivers/$BIND_DRIVER_NAME/bind";
+	print($CMD_BIND_2."\n");
+	system($CMD_BIND_2);
+	print("Toggled $DEVICE_ID,$DEVICE_ID_2 to $BIND_DRIVER_NAME\n");
+	system("ls -la /sys/bus/pci/drivers/$BIND_DRIVER_NAME");
+}
+

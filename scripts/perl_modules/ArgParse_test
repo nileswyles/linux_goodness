@@ -8,31 +8,20 @@ use ArgParse;
 # result:
 # ArgParse_test -key "value value"
 # result: 
-my ($mapref) = ArgParse::parse();
-my %map = %$mapref;
-my %map2 = @ARGV;
-my (%map3) = ArgParse::parse();
 
-print("\nMAP FROM ArgParse MODULE\n");
-foreach (keys %map) {
-	print($_,":",$map{$_}, "\n");
+my %processors = {
+	"-test" => {
+		$ArgParse::SUB_KEY => sub {
+			"sub" => sub {
+				my ($val) = @_;
+				print("PROCESSING -test with value $val\n");
+			},
+			#	$ArgParse::USAGE_KEY => "TEST ARGUMENT",
+		"usage" => "TEST ARGUMENT"
+	}
 }
+};
 
-print("\nMAP FROM ArgParse 2 MODULE\n");
-foreach (keys %map3) {
-	print($_,":",$map3{$_}, "\n");
-}
-
-print("\nMAP FROM PERL PERLING\n");
-foreach (keys %map2) {
-	print($_,":",$map2{$_}, "\n");
-}
-
-if (%map{"-key"}) {
-	print("map1 yess\n");
-
-}
-
-if (%map2{"-key"}) {
-	print("map2 yess\n");
-}
+#ArgParse::addProcessors(\%processors);
+ArgParse::parse();
+ArgParse::processAll();
