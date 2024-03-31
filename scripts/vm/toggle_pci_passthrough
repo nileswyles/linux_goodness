@@ -6,23 +6,49 @@ my $DEVICE_ID_VIDEO = "0000:01:00.0"; # video
 my $DEVICE_ID_VIDEO_AUDIO = "0000:01:00.1"; # audio
 
 my $VFIO_DRIVER_NAME = "vfio-pci";
-#my $NVIDIA_DRIVER_NAME = "nvidia";
-my $NVIDIA_DRIVER_NAME = "nouveau";
+#my $VIDEO_DRIVER_NAME = "nvidia";
+my $VIDEO_DRIVER_NAME = "nouveau";
 my $AUDIO_DRIVER_NAME = "snd_hda_intel";
+
+my %CMD_ENABLE_DRIVER = {
+	"vfio-pci" => "modprobe vfio_pci",
+	"nvidia" => "modprobe nvidia_uvm",
+	"nouveau" => "modprobe nouveau"
+}
 
 sub updateDeviceToDriverLinkState {
 	my ($device_id, $driver_name, $bind_state) = @_;
 	my $cmd = "echo $device_id > /sys/bus/pci/drivers/$driver_name/$bind_state";
-	print($cmd."\n");
+	print($cmd."\n\t");
 	system($cmd);
 }
 
+sub bindVideoOrLoadDriver {
+	my ($driver_name) = @_;
+	# if kernel module loaded, bind device to driver... else modprobe to load kernel module (which implicitly binds)
+	if (`lsmod` =~ /$driver_name/) { # NVIDIA MODULE LOADED
+		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
+	} else {
+		print($CMD_ENABLE_DRIVER{$driver_name}."\n");
+		system($CMD_ENABLE_DRIVER{$driver_name});
+		if (`lsmod` =~ /$driver_name/) {
+			if ($driver_name ne $VFIO_DRIVER_NAME) {
+				print("ATTENTION! $driver_name driver enabled... please restart the Display Manager?.\n");
+			}
+		} else {
+			print("Failed to load $driver_name module.");
+		}
+	}
+}
+
 sub printDriverState {
+	print("Driver State: \n\n");
+
 	print("VFIO driver: \n");
 	system("ls -la /sys/bus/pci/drivers/$VFIO_DRIVER_NAME");
-	print("\nNVIDIA driver: \n");
-	system("ls -la /sys/bus/pci/drivers/$NVIDIA_DRIVER_NAME");
-	print("\nIntel Audio driver: \n");
+	print("\nVideo driver: \n");
+	system("ls -la /sys/bus/pci/drivers/$VIDEO_DRIVER_NAME");
+	print("\nAudio driver: \n");
 	system("ls -la /sys/bus/pci/drivers/$AUDIO_DRIVER_NAME");
 }
 
@@ -37,24 +63,15 @@ if ($SWITCH eq "-off") {
 	# bind snd_hda_intel audio driver
 	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO_AUDIO, $AUDIO_DRIVER_NAME, "bind");
 
-	# if nvidia kernel module not loaded, modprobe... else bind nvidia video driver.
-	if (`lsmod` =~ /$NVIDIA_DRIVER_NAME.*/) { # NVIDIA MODULE LOADED
-		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $NVIDIA_DRIVER_NAME, "bind");
-	} else {
-		#my $CMD_ENABLE_NVIDIA = "modprobe nvidia_uvm; \\\n".
-		#	"modprobe nvidia_drm; \\\n". 
-		#		"modprobe nvidia-modeset; \\\n".
-		#		"modprobe nvidia";
-		my $CMD_ENABLE_NVIDIA = "modprobe noveau";
-		print($CMD_ENABLE_NVIDIA."\n");
-		system($CMD_ENABLE_NVIDIA);
-		print("ATTENTION! NVIDIA driver enabled... please restart the Display Manager?.\n");
-	}
-	print("Toggled $DEVICE_ID_VIDEO to $NVIDIA_DRIVER_NAME\n");
-	print("Toggled $DEVICE_ID_VIDEO_AUDIO to $AUDIO_DRIVER_NAME\n");
+	# bind NVIDIA video driver
+	bindVideoOrLoadDriver($NVIDIA_DRIVER_NAME);
+
+	print("Toggled $DEVICE_ID_VIDEO to $VIDEO_DRIVER_NAME\n");
+	print("Toggled $DEVICE_ID_VIDEO_AUDIO to $AUDIO_DRIVER_NAME\n\n");
+	print("See warning/error messages above.\n");
 } elsif ($SWITCH eq "-on") {
 	# unbind nvidia video driver
-	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $NVIDIA_DRIVER_NAME, "unbind");
+	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $VIDEO_DRIVER_NAME, "unbind");
 
 	# unbind snd_hda_intel audio driver
 	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO_AUDIO, $AUDIO_DRIVER_NAME, "unbind");
@@ -63,9 +80,11 @@ if ($SWITCH eq "-off") {
 	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO_AUDIO, $VFIO_DRIVER_NAME, "bind");
 
 	# bind VFIO video
-	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $VFIO_DRIVER_NAME, "bind");
+	bindVideoOrLoadDriver($VFIO_DRIVER_NAME);
+	
 	print("Toggled $DEVICE_ID_VIDEO to $VFIO_DRIVER_NAME\n");
-	print("Toggled $DEVICE_ID_VIDEO_AUDIO to $VFIO_DRIVER_NAME\n");
+	print("Toggled $DEVICE_ID_VIDEO_AUDIO to $VFIO_DRIVER_NAME\n\n");
+	print("See warning/error messages above.\n");
 } else {
 	print("User did not provide any valid options, printing current state: \n\n");
 }
