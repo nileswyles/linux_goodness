@@ -9,8 +9,7 @@ my $DEVICE_ID_VIDEO = "0000:01:00.0"; # video
 my $DEVICE_ID_VIDEO_AUDIO = "0000:01:00.1"; # audio
 
 my $VFIO_DRIVER_NAME = "vfio-pci";
-#my $VIDEO_DRIVER_NAME = "nvidia";
-my $VIDEO_DRIVER_NAME = "nouveau";
+my $VIDEO_DRIVER_NAME = "nvidia";
 my $AUDIO_DRIVER_NAME = "snd_hda_intel";
 
 sub printDriverState {
@@ -26,7 +25,7 @@ sub printDriverState {
 
 sub executeCmd {
 	my $cmd = shift;
-	print("$cmd\n\t");
+	print("$cmd\n");
 	system($cmd);
 }
 
@@ -36,24 +35,23 @@ sub updateDeviceToDriverLinkState {
 }
 
 sub bindVideoOrLoadDriver {
-	my %driver_names = {
+	my %driver_names = (
 		"vfio-pci" => "vfio_pci",
-		"nvidia" => "nvidia_uvm",
-		"nouveau" => "nouveau"
-	};
-	my ($driver_name) = @_;
-
+		"nvidia" => "nvidia_uvm"
+	);
+	my $driver_name = shift;
+	my $driver_module_name = $driver_names{$driver_name};
 	# if kernel module loaded, bind device to driver... else modprobe to load kernel module (which implicitly binds)
-	if (`lsmod` =~ /$driver_names{$driver_name}/) { # MODULE ALREADY LOADED
+	if (`lsmod` =~ /$driver_module_name/) { # MODULE ALREADY LOADED
 		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
 	} else {
-		executeCmd("modprobe $driver_names{$driver_name}");
-		if (`lsmod` =~ /$driver_names{$driver_name}/) {
-			if ($driver_name ne $VFIO_DRIVER_NAME) {
+		executeCmd("modprobe $driver_module_name");
+		if (`lsmod` =~ /$driver_module_name/) {
+			if ($driver_name ne "vfio_pci") {
 				print("ATTENTION! $driver_name driver enabled... please restart the Display Manager?.\n");
 			}
 		} else {
-			print("Failed to load $driver_name module.");
+			print("Failed to load $driver_module_name module.");
 		}
 	}
 }
@@ -69,14 +67,14 @@ if ($SWITCH eq "-off") {
 	# bind snd_hda_intel audio driver
 	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO_AUDIO, $AUDIO_DRIVER_NAME, "bind");
 
-	# bind NVIDIA video driver
-	bindVideoOrLoadDriver($NVIDIA_DRIVER_NAME);
+	# bind video driver
+	bindVideoOrLoadDriver($VIDEO_DRIVER_NAME);
 
 	print("Toggled $DEVICE_ID_VIDEO to $VIDEO_DRIVER_NAME\n");
 	print("Toggled $DEVICE_ID_VIDEO_AUDIO to $AUDIO_DRIVER_NAME\n\n");
 	print("See warning/error messages above.\n");
 } elsif ($SWITCH eq "-on") {
-	# unbind nvidia video driver
+	# unbind video driver
 	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $VIDEO_DRIVER_NAME, "unbind");
 
 	# unbind snd_hda_intel audio driver
