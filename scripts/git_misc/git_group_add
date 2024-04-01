@@ -9,6 +9,7 @@ my $GIT_TREE = `git ls-tree --full-tree --name-only -r HEAD`;
 my @FILES = split(/\n/, $GIT_TREE); # split result by line...
 
 my $error_code = 0;
+
 my $cmd = "sudo chgrp git /;".
 	"sudo chmod g+w /;".
 	"sudo chmod g+x /";
@@ -16,9 +17,11 @@ foreach (@FILES) {
 	if (defined $DIRECTORY) {
 		$cmd = "cd $DIRECTORY;";
 	} 
-	$cmd .= "sudo chgrp git $_;".
-		"sudo chmod g+w $_;".
-		"sudo chmod g+x $_";
+	my @tmp = split(/ /, $_);
+	my $file_name = $tmp[-1]; 
+	$cmd .= "sudo chgrp git $file_name;".
+		"sudo chmod g+w $file_name;".
+		"sudo chmod g+x $file_name";
 	$error_code =  $error_code | system($cmd);
 }
 

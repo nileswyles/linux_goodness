@@ -27,7 +27,7 @@ if (length(@ARGV) > 0) {
 	if ($ARGV[0] eq "-v") {
 		$CMD .= "\t-device vfio-pci,host=01:00.0 \\\n".
 		"\t-device vfio-pci,host=01:00.1 \\\n". 
-		"\t".join(" ",@ARGV[1..$#ARGV]);
+		"\t".join(" ",@ARGV[1..$#ARGV-1]);
 	} elsif ($#ARGV > 0) {
 		$CMD .= "\t".join(" ",@ARGV);
 	}
