@@ -9,8 +9,10 @@ my $GIT_TREE = `git ls-tree --full-tree --name-only -r HEAD`;
 my @FILES = split(/\n/, $GIT_TREE); # split result by line...
 
 my $error_code = 0;
+my $cmd = "sudo chgrp git /;".
+	"sudo chmod g+w /;".
+	"sudo chmod g+x /";
 foreach (@FILES) {
-	my $cmd = "";
 	if (defined $DIRECTORY) {
 		$cmd = "cd $DIRECTORY;";
 	} 
