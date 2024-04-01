@@ -10,12 +10,6 @@ my $VFIO_DRIVER_NAME = "vfio-pci";
 my $VIDEO_DRIVER_NAME = "nouveau";
 my $AUDIO_DRIVER_NAME = "snd_hda_intel";
 
-my %DRIVER_NAMES = {
-	"vfio-pci" => "vfio_pci",
-	"nvidia" => "nvidia_uvm",
-	"nouveau" => "nouveau"
-}
-
 sub printDriverState {
 	print("Driver State: \n\n");
 
@@ -39,13 +33,19 @@ sub updateDeviceToDriverLinkState {
 }
 
 sub bindVideoOrLoadDriver {
+	my %driver_names = {
+		"vfio-pci" => "vfio_pci",
+		"nvidia" => "nvidia_uvm",
+		"nouveau" => "nouveau"
+	};
 	my ($driver_name) = @_;
+
 	# if kernel module loaded, bind device to driver... else modprobe to load kernel module (which implicitly binds)
-	if (`lsmod` =~ /$DRIVER_NAMES{$driver_name}/) { # MODULE ALREADY LOADED
+	if (`lsmod` =~ /$driver_names{$driver_name}/) { # MODULE ALREADY LOADED
 		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
 	} else {
-		executeCmd("modprobe $DRIVER_NAMES{$driver_name}");
-		if (`lsmod` =~ /$DRIVER_NAMES{$driver_name}/) {
+		executeCmd("modprobe $driver_names{$driver_name}");
+		if (`lsmod` =~ /$driver_names{$driver_name}/) {
 			if ($driver_name ne $VFIO_DRIVER_NAME) {
 				print("ATTENTION! $driver_name driver enabled... please restart the Display Manager?.\n");
 			}
