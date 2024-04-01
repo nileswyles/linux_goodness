@@ -4,19 +4,19 @@ use warnings;
 
 my ($DIRECTORY) = @ARGV;
 
-my $GIT_TREE = `git ls-tree --full-tree --name-only -r HEAD`;
-
-my @FILES = split(/\n/, $GIT_TREE); # split result by line...
-
 my $error_code = 0;
 
-my $cmd = "sudo chgrp git /;".
-	"sudo chmod g+w /;".
-	"sudo chmod g+x /";
+my $cmd = "";
+if (defined $DIRECTORY) {
+	$cmd = "cd $DIRECTORY;";
+} 
+$cmd .= "sudo chgrp git $DIRECTORY;".
+	"sudo chmod g+w $DIRECTORY;".
+	"sudo chmod g+x $DIRECTORY";
+
+my $GIT_TREE = `git ls-tree --full-tree --name-only -r HEAD`;
+my @FILES = split(/\n/, $GIT_TREE); # split result by line...
 foreach (@FILES) {
-	if (defined $DIRECTORY) {
-		$cmd = "cd $DIRECTORY;";
-	} 
 	my @tmp = split(/ /, $_);
 	my $file_name = $tmp[-1]; 
 	$cmd .= "sudo chgrp git $file_name;".
