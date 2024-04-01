@@ -41,7 +41,6 @@ sub bindVideoOrLoadDriver {
 		"nvidia" => ("nvidia_uvm", "nvidia_drm", "nvidia_modeset", "nvidia")
 	);
 	my $driver_name = shift;
-	my $should_bind = 1;
 	foreach($driver_names{$driver_name}) {
 		if (`lsmod` =~ /$_/) { # TODO: inverse match?
 		} else {
@@ -51,14 +50,11 @@ sub bindVideoOrLoadDriver {
 					print("ATTENTION! $driver_name driver enabled... please restart the Display Manager?.\n");
 				}
 			} else {
-				$should_bind = 0;
-				print("Failed to load $driver_module_name module.");
+				print("Failed to load $_ module.");
 			}
 		}
 	} 
-	if ($should_bind) {
-		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
-	}
+	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
 }
 
 print("Configuring drivers... \n");
