@@ -45,13 +45,6 @@ sub bindVideoOrLoadDriver {
 		if (`lsmod` =~ /$_/) { # TODO: inverse match?
 		} else {
 			executeCmd("modprobe $_");
-			if (`lsmod` =~ /$_/) {
-				if ($driver_name ne "vfio_pci") {
-					print("ATTENTION! $driver_name driver enabled... please restart the Display Manager?.\n");
-				}
-			} else {
-				print("Failed to load $_ module.");
-			}
 		}
 	} 
 	updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
