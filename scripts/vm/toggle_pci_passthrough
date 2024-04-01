@@ -35,24 +35,29 @@ sub updateDeviceToDriverLinkState {
 }
 
 sub bindVideoOrLoadDriver {
+	# hash map of arrays since we are being explicit
 	my %driver_names = (
-		"vfio-pci" => "vfio_pci",
-		"nvidia" => "nvidia_uvm"
+		"vfio-pci" => ("vfio_pci", "vfio_iommu_type1", "vfio"),
+		"nvidia" => ("nvidia_uvm", "nvidia_drm", "nvidia_modeset", "nvidia")
 	);
 	my $driver_name = shift;
-	my $driver_module_name = $driver_names{$driver_name};
-	# if kernel module loaded, bind device to driver... else modprobe to load kernel module (which implicitly binds)
-	if (`lsmod` =~ /$driver_module_name/) { # MODULE ALREADY LOADED
-		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
-	} else {
-		executeCmd("modprobe $driver_module_name");
-		if (`lsmod` =~ /$driver_module_name/) {
-			if ($driver_name ne "vfio_pci") {
-				print("ATTENTION! $driver_name driver enabled... please restart the Display Manager?.\n");
-			}
+	my $should_bind = 1;
+	foreach($driver_names{$driver_name}) {
+		if (`lsmod` =~ /$_/) { # TODO: inverse match?
 		} else {
-			print("Failed to load $driver_module_name module.");
+			executeCmd("modprobe $_");
+			if (`lsmod` =~ /$_/) {
+				if ($driver_name ne "vfio_pci") {
+					print("ATTENTION! $driver_name driver enabled... please restart the Display Manager?.\n");
+				}
+			} else {
+				$should_bind = 0;
+				print("Failed to load $driver_module_name module.");
+			}
 		}
+	} 
+	if ($should_bind) {
+		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
 	}
 }
 
