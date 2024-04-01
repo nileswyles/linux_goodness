@@ -9,7 +9,9 @@ my $error_code = 0;
 my $cmd = "";
 if (defined $DIRECTORY) {
 	$cmd = "cd $DIRECTORY;";
-} 
+} else {
+	$DIRECTORY = "/";
+}
 $cmd .= "sudo chgrp git $DIRECTORY;".
 	"sudo chmod g+w $DIRECTORY;".
 	"sudo chmod g+x $DIRECTORY";
