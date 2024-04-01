@@ -1,0 +1,3 @@
+[submodule "scripts/autorandr"]
+	path = scripts/autorandr
+	url = https://github.com/edwardsuero/autorandr.git
