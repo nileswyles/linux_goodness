@@ -1,5 +1,8 @@
 #!/bin/perl
 
+use strict;
+use warnings;
+
 my ($SWITCH) = @ARGV;
 
 my $DEVICE_ID_VIDEO = "0000:01:00.0"; # video
@@ -22,7 +25,7 @@ sub printDriverState {
 }
 
 sub executeCmd {
-	my ($cmd) = shift;
+	my $cmd = shift;
 	print("$cmd\n\t");
 	system($cmd);
 }
