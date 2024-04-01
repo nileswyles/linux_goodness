@@ -33,6 +33,7 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias ll='ls -la --color=auto'
 alias p='echo $PATH | tr ":" "\n"'
+alias gst="git status 2> /dev/null | grep modified"
 
 PATH=$PATH:/scripts
 
