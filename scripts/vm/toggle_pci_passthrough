@@ -16,31 +16,6 @@ my %DRIVER_NAMES = {
 	"nouveau" => "nouveau"
 }
 
-sub updateDeviceToDriverLinkState {
-	my ($device_id, $driver_name, $bind_state) = @_;
-	my $cmd = "echo $device_id > /sys/bus/pci/drivers/$driver_name/$bind_state";
-	print("$cmd\n\t");
-	system($cmd);
-}
-
-sub bindVideoOrLoadDriver {
-	my ($driver_name) = @_;
-	# if kernel module loaded, bind device to driver... else modprobe to load kernel module (which implicitly binds)
-	if (`lsmod` =~ /$DRIVER_NAMES{$driver_name}/) { # MODULE ALREADY LOADED
-		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
-	} else {
-		print("modprobe $DRIVER_NAMES{$driver_name}\n");
-		system("modprobe $DRIVER_NAMES{$driver_name}");
-		if (`lsmod` =~ /$DRIVER_NAMES{$driver_name}/) {
-			if ($driver_name ne $VFIO_DRIVER_NAME) {
-				print("ATTENTION! $driver_name driver enabled... please restart the Display Manager?.\n");
-			}
-		} else {
-			print("Failed to load $driver_name module.");
-		}
-	}
-}
-
 sub printDriverState {
 	print("Driver State: \n\n");
 
@@ -50,6 +25,34 @@ sub printDriverState {
 	system("ls -la /sys/bus/pci/drivers/$VIDEO_DRIVER_NAME");
 	print("\nAudio driver: \n");
 	system("ls -la /sys/bus/pci/drivers/$AUDIO_DRIVER_NAME");
+}
+
+sub executeCmd {
+	my ($cmd) = shift;
+	print("$cmd\n\t");
+	system($cmd);
+}
+
+sub updateDeviceToDriverLinkState {
+	my ($device_id, $driver_name, $bind_state) = @_;
+	executeCmd("echo $device_id > /sys/bus/pci/drivers/$driver_name/$bind_state");
+}
+
+sub bindVideoOrLoadDriver {
+	my ($driver_name) = @_;
+	# if kernel module loaded, bind device to driver... else modprobe to load kernel module (which implicitly binds)
+	if (`lsmod` =~ /$DRIVER_NAMES{$driver_name}/) { # MODULE ALREADY LOADED
+		updateDeviceToDriverLinkState($DEVICE_ID_VIDEO, $driver_name, "bind");
+	} else {
+		executeCmd("modprobe $DRIVER_NAMES{$driver_name}");
+		if (`lsmod` =~ /$DRIVER_NAMES{$driver_name}/) {
+			if ($driver_name ne $VFIO_DRIVER_NAME) {
+				print("ATTENTION! $driver_name driver enabled... please restart the Display Manager?.\n");
+			}
+		} else {
+			print("Failed to load $driver_name module.");
+		}
+	}
 }
 
 print("Configuring drivers... \n");
