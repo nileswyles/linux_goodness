@@ -23,6 +23,7 @@ foreach (@FILES) {
 		"sudo chmod g+w $file_name;".
 		"sudo chmod g+x $file_name";
 	$error_code =  $error_code | system($cmd);
+	$cmd = "";
 }
 
 exit $error_code;
