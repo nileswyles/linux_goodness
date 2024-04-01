@@ -6,13 +6,11 @@ my ($DIRECTORY) = @ARGV;
 
 my $error_code = 0;
 
-my $cmd = "";
-if (defined $DIRECTORY) {
-	$cmd = "cd $DIRECTORY;";
-} else {
+if (not defined $DIRECTORY) {
 	$DIRECTORY = "/";
 }
-$cmd .= "sudo chgrp git $DIRECTORY;".
+my $cmd = "cd $DIRECTORY;".
+	"sudo chgrp git $DIRECTORY;".
 	"sudo chmod g+w $DIRECTORY;".
 	"sudo chmod g+x $DIRECTORY";
 
