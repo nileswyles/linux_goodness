@@ -1,0 +1,6 @@
+#!/bin/perl
+
+if(`git status 2> /dev/null` =~ /(^On branch(.|\n)*)Untracked/)
+{
+	print $1;
+}
