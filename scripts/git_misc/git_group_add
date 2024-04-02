@@ -9,21 +9,18 @@ my $error_code = 0;
 if (not defined $DIRECTORY) {
 	$DIRECTORY = "/";
 }
-my $cmd = "cd $DIRECTORY;".
-	"sudo chgrp git $DIRECTORY;".
-	"sudo chmod g+w $DIRECTORY;".
-	"sudo chmod g+x $DIRECTORY";
+my $cmd = "cd $DIRECTORY; \\\n";
 
 my $GIT_TREE = `git ls-tree --full-tree --name-only -r HEAD`;
 my @FILES = split(/\n/, $GIT_TREE); # split result by line...
 foreach (@FILES) {
-	my @tmp = split(/ /, $_);
-	my $file_name = $tmp[-1]; 
-	$cmd .= "sudo chgrp git $file_name;".
-		"sudo chmod g+w $file_name;".
-		"sudo chmod g+x $file_name";
-	$error_code =  $error_code | system($cmd);
-	$cmd = "";
+	$cmd .= "sudo chgrp git $_; \\\n".
+		"sudo chmod g+w $_; \\\n".
+		"sudo chmod g+x $_; \\\n";
 }
 
-exit $error_code;
+$cmd .= "sudo chgrp git $DIRECTORY; \\\n".
+	"sudo chmod g+w $DIRECTORY; \\\n".
+	"sudo chmod g+x $DIRECTORY";
+print("$cmd\n");
+exit system($cmd);

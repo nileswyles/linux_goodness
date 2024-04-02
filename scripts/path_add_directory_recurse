@@ -1,0 +1,33 @@
+#!/bin/bash
+
+recurseDirs() {
+	for F in $@; do 
+		if [ $F != $1 ]; then
+			# if is dir... then add to path (if not already there) and recurse
+			dir=`ls $1$F/ 2> /dev/null` 
+			if [ -n "$dir" ]; then 
+				#echo $PATH
+				exists=`echo $PATH | grep $1$F`
+				if [ -z "$exists" ]; then 
+					#echo "NOT EXISTS IN PATH: $1$F"
+					#path=$path:$1$F
+
+					# because $(), echo's are captured (effective return)
+					echo -n ":$1$F"
+				fi
+				recurseDirs "$1$F/" $dir
+			fi
+		fi
+	done
+}
+
+root=`ls $1/ 2> /dev/null`
+if [ -n "$root" ]; then
+	ret=$(recurseDirs "$1/" $root)
+	exists=`echo $PATH | grep $1`
+	if [ -z "$exists" ]; then 
+		export PATH=$PATH:$1
+	fi
+	export PATH=$PATH$ret # $ret starts with :
+	#echo $PATH
+fi
