@@ -224,6 +224,7 @@ bar {
 bindsym $mod+backslash exec chromium
 bindsym $mod+slash bar mode toggle
 
-for_window [all] title_window_icon padding 5px
+# 12pt monospaced font, so 16px padding...
+for_window [all] title_window_icon padding 16px
 title_align center
 

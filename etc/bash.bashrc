@@ -37,5 +37,15 @@ alias p='echo $PATH | tr ":" "\n"'
 # adds $1 to path, iterates over all sub directories and adds to path if not already there...
 source /scripts/path_add_directory_recurse /scripts
 
-HISTFILE=5000
-HISTFILESIZE=10000
+HISTFILE=500000
+HISTFILESIZE=10000000
+
+# if not ssh and wm not already running (i.e. first login), launch wm and exit terminal. Getty TTY will act as our "login screen"? i3lock for lockscreen
+# systemd?
+# or or or 
+#  get dm-tool working, continue using lightdm and don't use i3lock.......... monitor dbus to see what's happneing (blank screen)?
+#
+# gdm is a mess if not using gnome... afaik... sesssion selction not trivial (dbus config?), dm-tool not configured properly... gnome lock not modular... 
+#
+#
+# 
