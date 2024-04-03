@@ -1,0 +1,12 @@
+#!/bin/perl
+
+my ($INC_AMOUNT) = @ARGV;
+
+if (`pactl get-sink-volume \@DEFAULT_SINK\@` =~ /([0-9]+)%/) {
+	my $new_volume = $1 + $INC_AMOUNT;
+	if ($new_volume > 100) {
+		$new_volume = 100;
+	}
+	exit system("pactl set-sink-volume \@DEFAULT_SINK\@ $new_volume%");
+	
+} # else don't do anything
