@@ -37,5 +37,8 @@ alias p='echo $PATH | tr ":" "\n"'
 # adds $1 to path, iterates over all sub directories and adds to path if not already there...
 source /scripts/path_add_directory_recurse /scripts
 
-HISTFILE=500000
+set -o
+
+HISTFILE=$HOME/.bash_history
+HISTSIZE=500000
 HISTFILESIZE=10000000
