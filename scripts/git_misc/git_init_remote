@@ -17,9 +17,7 @@ my $CMD = "cd $DIRECTORY;".
 "git init;".
 "git config --global --add safe.directory $DIRECTORY;".
 "git remote add origin $URL;".
-"git fetch;".
-"git reset --hard origin/main;".
-"git branch -m main;".
+"git pull origin main;".
 "chgrp -R git .git;".
 "chmod -R g+w .git;".
 "./scripts/git_misc/git_group_add";
