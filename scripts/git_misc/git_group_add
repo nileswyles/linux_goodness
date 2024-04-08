@@ -28,8 +28,8 @@ my @FILES = <$fh>;
 my $CMD = "";
 for (my $i = 0; $i < scalar(@FILES); $i++) {
 	if ($i == $#FILES) { # if last file
-		$CMD .= "chgrp git $_;".
-			"chmod g+w $_;".
+		$CMD .= "chgrp git $_; \\\n".
+			"chmod g+w $_; \\\n".
 			"chmod g+x $_;";
 	} else {
 		$CMD .= "chgrp git $_; \\\n".
