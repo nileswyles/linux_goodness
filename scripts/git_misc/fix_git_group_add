@@ -16,8 +16,7 @@ sub isFileManaged {
 	my $managed = 0;
 	#print("PROCESSING FILE: $file_path\n");
 	foreach (@GIT_MANAGED_FILES) {
-		if ("/$_" eq "$file_path") {
-			#print("FILE MANAGED: $file_path\n");
+		if ("/$_" eq "$file_path") { #print("FILE MANAGED: $file_path\n");
 			$managed = 1;
 		}
 	}
@@ -37,43 +36,19 @@ sub processDir {
 	my @files = split(/\n/, $file_list);
 	foreach (@files) {
 		my $file_path = "$parent/$_";
-		#print("Processing $file_path");
 		if (!isFileManaged($file_path)) { #lmao
 			my $ls_detailed = `ls -la $file_path 2> /dev/null`;
-			if($ls_detailed =~ /^total\s+(\d+)\n[a-zA-Z\x2d]+\s+[0-9]+\s+([a-zA-Z]+)\s+([a-zA-Z]+)/) {
-				# lol, there's some bs going on here... 
+			if($ls_detailed =~ /(^total\s+\d+\n)?[a-zA-Z\x2d]+\s+[0-9]+\s+([a-zA-Z]+)\s+([a-zA-Z]+)/) {
+				# if $1 defined then it's a directory...
 				if ($2 ne $3) {
-					print("DIRECTORY $file_path ...... user: $2, group: $3 ---- new group: $2\n");
+					print("$file_path ...... user: $2, group: $3 ---- new group: $2\n");
 					if ($COMMIT eq "--commit") {
 						my $cmd = "chgrp $2 $file_path";
 						system($cmd);
 					}
 				}
-			} else {
-				# perl -e 'my @arr = split(/ /, qx(ls -la /etc/shadow)); foreach(@arr) {print "$_\n"};'
-				# -rw--w----
-				# 1
-				# root
-				# git
-				# 980
-				# Apr
-				# 
-				# 4
-				# 15:52
-				# /etc/shadow
-				my @arr = split(/ /, $ls_detailed); # parse user and group...
-				# $arr[2] == user
-				# $arr[3] == group
-				if ($arr[2] ne $arr[3]) {
-					print("FILE $file_path | $ls_detailed ...... user: $arr[2], group: $arr[3] ---- new group: $arr[2]\n");
-					if ($COMMIT eq "--commit") {
-						my $cmd = "chgrp $arr[2] $file_path";
-						system($cmd);
-					}
-				}
 			}
 		}
-		#print("\n");
 		my $dir = `ls $file_path/ 2> /dev/null`;
 		if (length($dir) > 0) { # isDirectory
 			processDir($file_path, $dir)

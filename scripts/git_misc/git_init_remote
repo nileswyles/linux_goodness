@@ -2,24 +2,24 @@
 use strict;
 use warnings;
 
-my ($URL, $DIRECTORY) = @ARGV;
+# TOOD: INTEGRATE ARGPARSE and add commit/dry_run option?
 
-if (not defined $URL) {
-  die "PLEASE SPECIFY REMOTE URL";
-}
+my $URL = "https://nileswyles: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\@github.com/nileswyles/linux_goodness.git"
 
-if (not defined $DIRECTORY) {
-  $DIRECTORY = "/";
-}
+my ($GIT_FILES_MANIFEST_FILE) = @ARGV;
 
-my $CMD = "cd $DIRECTORY;". 
-"mkdir .git;".
-"git init;".
+my $CMD = "mkdir .git;".
+"chgrp -R git .git;".
+"chmod -R g+w .git;".
+"./scripts/git_misc/git_group_add $GIT_FILES_MANIFEST_FILE";
+
+print("$CMD\n");
+system($CMD);
+
+$CMD = "git init;".
 "git config --global --add safe.directory $DIRECTORY;".
 "git remote add origin $URL;".
 "git pull origin main;".
-"chgrp -R git .git;".
-"chmod -R g+w .git;".
-"./scripts/git_misc/git_group_add";
 
-system($CMD) == 0 or exit $?;
+print("$CMD\n");
+exit system($CMD);

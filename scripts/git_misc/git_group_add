@@ -2,25 +2,34 @@
 use strict;
 use warnings;
 
-my ($DIRECTORY) = @ARGV;
+# TODO: INTEGRATE ARGPARSE and add commit/dry_run option?;
 
-my $error_code = 0;
+my ($GIT_FILES_MANIFEST_FILE) = @ARGV;
 
-if (not defined $DIRECTORY) {
-	$DIRECTORY = "/";
+# STDIN usage:
+#	<script> << EOF
+# 	LINE_1
+# 	LINE_2
+# 	...
+# 	EOF
+my $fh = STDIN;
+# if file argument not defined, read git tree from stdin
+if (defined $GIT_FILES_MANIFEST_FILE) {
+	open(my $fh, "<", $GIT_FILES_MANIFEST_FILE);
 }
-my $cmd = "cd $DIRECTORY; \\\n";
+# <STDIN> == readline(STDIN) --- see perlop
+# $/ == separator character
+my @FILES = <$fh>;
 
-my $GIT_TREE = `git ls-tree --full-tree --name-only -r HEAD`;
-my @FILES = split(/\n/, $GIT_TREE); # split result by line...
+my $CMD = "";
 foreach (@FILES) {
-	$cmd .= "sudo chgrp git $_; \\\n".
+	$CMD .= "sudo chgrp git $_; \\\n".
 		"sudo chmod g+w $_; \\\n".
 		"sudo chmod g+x $_; \\\n";
 }
-
-$cmd .= "sudo chgrp git $DIRECTORY; \\\n".
+$CMD .= "sudo chgrp git $DIRECTORY; \\\n".
 	"sudo chmod g+w $DIRECTORY; \\\n".
 	"sudo chmod g+x $DIRECTORY";
-print("$cmd\n");
-exit system($cmd);
+
+print("$CMD\n");
+exit system($CMD);
