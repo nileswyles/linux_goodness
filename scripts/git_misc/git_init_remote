@@ -10,14 +10,14 @@ my ($GIT_FILES_MANIFEST_FILE, $COMMIT) = @ARGV;
 
 # Individually take care of .git and .git_modules (add any other metadata files as needed.)
 my $CMD = "mkdir .git; \\\n".
-"chgrp -R git .git; \\\n".
-"chmod -R g+w .git; \\\n".
-"chmod -R g+r .git; \\\n".
-"echo \"\" > .git_modules; \\\n".
-"chgrp -R git .git_modules; \\\n".
-"chmod -R g+w .git_modules; \\\n".
-"chmod -R g+r .git_modules; \\\n".
-"./scripts/git_misc/git_group_add $GIT_FILES_MANIFEST_FILE";
+	"chgrp -R git .git; \\\n".
+	"chmod -R g+w .git; \\\n".
+	"chmod -R g+r .git; \\\n".
+	"echo \"\" > .git_modules; \\\n".
+	"chgrp -R git .git_modules; \\\n".
+	"chmod -R g+w .git_modules; \\\n".
+	"chmod -R g+r .git_modules; \\\n".
+	"./scripts/git_misc/git_group_add $GIT_FILES_MANIFEST_FILE";
 
 print("***As elevated user***: \n$CMD\n");
 if ($COMMIT eq "--commit") {
@@ -25,10 +25,10 @@ if ($COMMIT eq "--commit") {
 }
 
 $CMD = "git config --global --add safe.directory $DIRECTORY; \\\n".
-"git config --global --add init.defaultBranch main; \\\n".
-"git init; \\\n".
-"git remote add origin $URL; \\\n".
-"git pull origin main;".
+	"git config --global --add init.defaultBranch main; \\\n".
+	"git init; \\\n".
+	"git remote add origin $URL; \\\n".
+	"git pull origin main";
 
 print("$CMD\n");
 if ($COMMIT eq "--commit") {
