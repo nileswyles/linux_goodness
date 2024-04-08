@@ -9,15 +9,15 @@ my $URL = "https://nileswyles:github_pat_11ABFY2AA0Wagkg1mFdrOu_cou37bsvAXwS6H5E
 my ($GIT_FILES_MANIFEST_FILE, $COMMIT) = @ARGV;
 
 # Individually take care of .git and .git_modules (add any other metadata files as needed.)
-my $CMD = "sudo mkdir .git; \\\n".
-"sudo chgrp -R git .git; \\\n".
-"sudo chmod -R g+w .git; \\\n".
-"sudo chmod -R g+r .git; \\\n".
-"sudo echo \"\" > .git_modules; \\\n".
-"sudo chgrp -R git .git_modules; \\\n".
-"sudo chmod -R g+w .git_modules; \\\n".
-"sudo chmod -R g+r .git_modules; \\\n".
-"sudo ./scripts/git_misc/git_group_add $GIT_FILES_MANIFEST_FILE";
+my $CMD = "mkdir .git; \\\n".
+"chgrp -R git .git; \\\n".
+"chmod -R g+w .git; \\\n".
+"chmod -R g+r .git; \\\n".
+"echo \"\" > .git_modules; \\\n".
+"chgrp -R git .git_modules; \\\n".
+"chmod -R g+w .git_modules; \\\n".
+"chmod -R g+r .git_modules; \\\n".
+"./scripts/git_misc/git_group_add $GIT_FILES_MANIFEST_FILE";
 
 print("***As elevated user***: \n$CMD\n");
 if ($COMMIT eq "--commit") {
