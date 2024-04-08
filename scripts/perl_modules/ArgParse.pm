@@ -1,6 +1,20 @@
 package ArgParse;
+
+use 5.38.2;
+
 use strict;
 use warnings;
+
+# can I do something similar for defining the arguments and remove addProcessors??
+# why is this even a thing?
+use constant {
+	SUB_KEY => "sub",
+	USAGE_KEY => "usage",
+	VALUE_KEY => "value",
+
+	HELP_ARG_KEY => "--help",
+	VERSION_ARG_KEY => "--version",
+};
 
 # Processors DataStructure
 # {
@@ -26,20 +40,14 @@ use warnings;
 #	...
 # }
 
-my $SUB_KEY = "";
-my $VALUE_KEY = "";
-my $USAGE_KEY = "";
-
-my $HELP_ARG_KEY = "--help";
-my $VERSION_ARG_KEY = "--version";
 my %PROCESSORS = {
-	$HELP_ARG_KEY => {
-		$SUB_KEY => &printUsage,
-		$USAGE_KEY => "Prints application usage."
+	HELP_ARG_KEY => {
+		SUB_KEY => &printUsage,
+		USAGE_KEY => "Prints application usage."
 	},
-	$VERSION_ARG_KEY => {
-		$SUB_KEY => &printVersion,
-		$USAGE_KEY => "Prints application version."
+	VERSION_ARG_KEY => {
+		SUB_KEY => &printVersion,
+		USAGE_KEY => "Prints application version."
 	}
 };
 
@@ -54,7 +62,7 @@ sub printUsage {
 	my $usage = "";
 	foreach (keys %PROCESSORS) {
 		my %processor = $PROCESSORS{$_};
-		$usage .= "\t$_\t\t\t\t$processor{$USAGE_KEY}\n";
+		$usage .= "\t$_\t\t\t\t$processor{USAGE_KEY}\n";
 	}
 	$usage .= "\n";
 	print($usage);
@@ -63,8 +71,12 @@ sub printUsage {
 
 sub parse {
 	my $prev_key = "";
-	print("PARSING\n");
-	for (my $i = 0; $i < $#ARGV; $i++) {
+	%ARGH = {};
+	if (::DEBUG) {
+		print("PARSING\n");
+	}
+	# O1+n
+	for (my $i = 0; $i < scalar(@ARGV); $i++) {
 		if ($ARGV[$i] =~ /-(.+)/) {
 			$prev_key = $ARGV[$i];
 			$ARGH{$prev_key} = 1;
@@ -76,17 +88,21 @@ sub parse {
 			$ARGH{$prev_key} .= " $ARGV[$i]";
 		}
 	}
-	print("PARSING COMPLETE\n");
-	if ($ARGH{$HELP_ARG_KEY}) {
-		processArg($HELP_ARG_KEY);
-	} elsif ($ARGH{$VERSION_ARG_KEY}) {
-		processArg($VERSION_ARG_KEY);
+	if (::DEBUG) {
+		print("PARSING COMPLETE\n");
+	}
+	if ($ARGH{HELP_ARG_KEY}) {
+		processArg(HELP_ARG_KEY);
+	} elsif ($ARGH{VERSION_ARG_KEY}) {
+		processArg(VERSION_ARG_KEY);
 	}
 }
 
 sub addProcessors {
 	# think about this somemore
-	print("Added Processors \n");
+	if (::DEBUG) {
+		print("Added Processors \n");
+	}
 	my ($hashref) = @_;
 
 	my %new_processors = %{$hashref};
@@ -113,7 +129,7 @@ sub processAll {
 		#		- HELP
 		#		- VERSION
 		#		- OTHERS in "random" order? because key(set)? If need specific order, call processArg individually?
-		if ($_ ne $HELP_ARG_KEY && $_ ne $VERSION_ARG_KEY) { 
+		if ($_ ne HELP_ARG_KEY && $_ ne VERSION_ARG_KEY) { 
 			processArg($_);
 		}
 	}

@@ -6,20 +6,31 @@ use warnings;
 
 my $URL = "https://nileswyles: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\@github.com/nileswyles/linux_goodness.git"
 
-my ($GIT_FILES_MANIFEST_FILE) = @ARGV;
+my ($GIT_FILES_MANIFEST_FILE, $COMMIT) = @ARGV;
 
-my $CMD = "mkdir .git;".
-"chgrp -R git .git;".
-"chmod -R g+w .git;".
-"./scripts/git_misc/git_group_add $GIT_FILES_MANIFEST_FILE";
+# Individually take care of .git and .git_modules (add any other metadata files as needed.)
+my $CMD = "sudo mkdir .git; \\\n".
+"sudo chgrp -R git .git; \\\n".
+"sudo chmod -R g+w .git; \\\n".
+"sudo chmod -R g+r .git; \\\n".
+"sudo echo \"\" > .git_modules; \\\n".
+"sudo chgrp -R git .git_modules; \\\n".
+"sudo chmod -R g+w .git_modules; \\\n".
+"sudo chmod -R g+r .git_modules; \\\n".
+"sudo ./scripts/git_misc/git_group_add $GIT_FILES_MANIFEST_FILE";
 
-print("$CMD\n");
-system($CMD);
+print("***As elevated user***: \n$CMD\n");
+if ($COMMIT eq "--commit") {
+	system("su root -c \"$CMD\"");
+}
 
-$CMD = "git init;".
-"git config --global --add safe.directory $DIRECTORY;".
-"git remote add origin $URL;".
+$CMD = "git config --global --add safe.directory $DIRECTORY; \\\n".
+"git config --global --add init.defaultBranch main; \\\n".
+"git init; \\\n".
+"git remote add origin $URL; \\\n".
 "git pull origin main;".
 
 print("$CMD\n");
-exit system($CMD);
+if ($COMMIT eq "--commit") {
+	exit system($CMD);
+}

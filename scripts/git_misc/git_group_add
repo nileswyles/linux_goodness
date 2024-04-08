@@ -1,11 +1,17 @@
 #!/bin/perl
+
+use 5.38.2;
 use strict;
 use warnings;
 
 # TODO: INTEGRATE ARGPARSE and add commit/dry_run option?;
 
+# To generate manifest file:
+# git ls-tree -r --full-name --name-only HEAD > MANIFEST_FILE_PATH
+
 my ($GIT_FILES_MANIFEST_FILE) = @ARGV;
 
+# if file argument not defined, read git tree from STDIN
 # STDIN usage:
 #	<script> << EOF
 # 	LINE_1
@@ -13,23 +19,30 @@ my ($GIT_FILES_MANIFEST_FILE) = @ARGV;
 # 	...
 # 	EOF
 my $fh = STDIN;
-# if file argument not defined, read git tree from stdin
 if (defined $GIT_FILES_MANIFEST_FILE) {
 	open(my $fh, "<", $GIT_FILES_MANIFEST_FILE);
 }
-# <STDIN> == readline(STDIN) --- see perlop
-# $/ == separator character
+
 my @FILES = <$fh>;
 
 my $CMD = "";
-foreach (@FILES) {
-	$CMD .= "sudo chgrp git $_; \\\n".
-		"sudo chmod g+w $_; \\\n".
-		"sudo chmod g+x $_; \\\n";
+for (my $i = 0; $i < scalar(@FILES); $i++) {
+	if ($i == $#FILES) { # if last file
+		$CMD .= "chgrp git $_;".
+			"chmod g+w $_;".
+			"chmod g+x $_;";
+	} else {
+		$CMD .= "chgrp git $_; \\\n".
+			"chmod g+w $_; \\\n".
+			"chmod g+x $_; \\\n";
+	}
 }
-$CMD .= "sudo chgrp git $DIRECTORY; \\\n".
-	"sudo chmod g+w $DIRECTORY; \\\n".
-	"sudo chmod g+x $DIRECTORY";
 
-print("$CMD\n");
-exit system($CMD);
+print("$CMD");
+exit system("$CMD");
+
+# <STDIN> == readline(STDIN) --- see perlop
+# $/ == separator character
+#
+# does <STDIN> actually read until separator and block until more data?? lol more bs?
+# 5.38.2 documentation says otherwise so let's continue with this...

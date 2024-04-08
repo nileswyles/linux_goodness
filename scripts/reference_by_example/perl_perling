@@ -57,3 +57,13 @@ if (0) {
 } else {
 	print("IF NO\n");
 }
+
+my @BLAH = ("ALNKDNL", "ANLNDKLKA", "END");
+
+my $scalar = scalar(@BLAH);
+print("scalar: $scalar | \$:$BLAH | \$#: $#BLAH | \@: @BLAH\n");
+# 3 | | 2 | ALNKDNL ...
+for (my $i = 0; $i < scalar(@BLAH); $i++) {
+
+	print("$i, $BLAH[$i]\n");
+}

@@ -1,5 +1,14 @@
 #!/bin/perl -I/scripts/perl_modules
 
+use 5.38.2;
+
+use strict;
+use warnings;
+
+use constant {
+	DEBUG => 1,
+};
+
 use ArgParse;
 
 # ArgParse_test -key value
@@ -8,20 +17,27 @@ use ArgParse;
 # result:
 # ArgParse_test -key "value value"
 # result: 
+#
 
-my %processors = {
-	"-test" => {
-		$ArgParse::SUB_KEY => sub {
-			"sub" => sub {
-				my ($val) = @_;
-				print("PROCESSING -test with value $val\n");
-			},
-			#	$ArgParse::USAGE_KEY => "TEST ARGUMENT",
-		"usage" => "TEST ARGUMENT"
-	}
+foreach (keys %ArgParse::PROCESSORS) {
+	print("$_\n");
 }
-};
 
-#ArgParse::addProcessors(\%processors);
+print("TEST1\n");
+
+# scalar lvalue automatically provides reference (\%)?
+my $processors = (
+	"-test" => (
+		ArgParse::SUB_KEY => sub {
+			my ($val) = @_;
+			print("PROCESSING -test with value $val\n");
+		},
+		ArgParse::USAGE_KEY => "TEST ARGUMENT",
+	)
+);
+
+print("TEST\n");
+
+ArgParse::addProcessors($processors);
 ArgParse::parse();
 ArgParse::processAll();
