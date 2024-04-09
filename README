@@ -44,22 +44,20 @@ config AppArmor or SELinux to isolate cookies and workspace folders (only select
 ## gTile config ##
 
 # Quarter
-<Control><Shift>Left --- 2x2 1:1 1:1, 2:1 2:1, 1:2 1:2, 2:2, 2:2
+<Control><Super>Left --- 2x2 1:1 1:1, 2:1 2:1, 1:2 1:2, 2:2, 2:2
 # Thirds
-<Control><Shift>Down --- 3x1 1:1 1:1, 2:1 2:1, 3:1 3:1
+<Control><Super>Down --- 3x1 1:1 1:1, 2:1 2:1, 3:1 3:1
 # Two Thirds
-<Control><Shift>Right --- 3x1 1:1 2:1, 2:1 3:1
-# Half Vertical Top
-<Control><Super>Up --- 1x2 1:1 1:1
-# Half Vertical Botton
-<Control><Super>Down --- 1x2 1:2 1:2
+<Control><Super>Right --- 3x1 1:1 2:1, 2:1 3:1
+# Half Vertical
+<Control><Super>Up --- 1x2 1:1 1:1, 1:2 1:2
 
 # Tiles supported by GNOME by default
 
 # Half Horizontal Left
 <Super>Left
-# Half Horizontal Left
-<Super>Left
+# Half Horizontal Right
+<Super>Right
 # "Full"
 <Super>Up
 # Undo tile/Float
