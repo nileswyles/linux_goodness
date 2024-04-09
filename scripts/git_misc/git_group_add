@@ -43,6 +43,3 @@ exit system("$CMD");
 
 # <STDIN> == readline(STDIN) --- see perlop
 # $/ == separator character
-#
-# does <STDIN> actually read until separator and block until more data?? lol more bs?
-# 5.38.2 documentation says otherwise so let's continue with this...
