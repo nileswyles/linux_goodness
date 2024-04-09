@@ -1,0 +1,95 @@
+######
+Sueroux 
+	Based on Arch
+####
+
+TODO:
+- clean this up...
+- add more detail
+
+## FRESH ARCH INSTALL ##
+# WHY ARCH? - BECAUSE PACKAGE MIRRORS, no strong opinion on this...
+
+create user...
+restore linux_goodness (Xresources, etc.)
+config Display Manager
+- gdm/gnome_shell/nautilus/gnome-control-center/networkmanager?,etc... (suspend/resume works out of the box (twss, lol)?)
+or 
+- lightdm/i3/i3lock/suspend/resume (PM/ACPI - upowerd)
+config AppArmor or SELinux to isolate cookies and workspace folders (only select applications can access those files)
+- cookies == edge and git
+- software_workspace == vscode, vim (xterm?)
+- hardware_workspace == kicad
+- zsh because defaults aren't the fad?
+
+- ***** see package manifest below for more details... *****
+
+## FRESH ARCH INSTALL ##
+
+## INSTALLATION INSTRUCTIONS FROM BACKUP ##
+
+1. BOOT with live CD.
+2. Create partitions:
+	/boot
+	/
+	/swap
+3. Mount partitions (configure swap?)
+4. Extract distro tar file.
+    -- tar -xvzf <tar_file>.tar.gz -C <mounted_root_dir>
+5. chroot
+6. edit grub.cfg, /etc/fstab to use new drive GUIDs
+
+## INSTALLATION INSTRUCTIONS FROM BACKUP ##
+
+## gTile config ##
+
+# Quarter
+<Control><Shift>Left --- 2x2 1:1 1:1, 2:1 2:1, 1:2 1:2, 2:2, 2:2
+# Thirds
+<Control><Shift>Down --- 3x1 1:1 1:1, 2:1 2:1, 3:1 3:1
+# Two Thirds
+<Control><Shift>Right --- 3x1 1:1 2:1, 2:1 3:1
+# Half Vertical Top
+<Control><Super>Up --- 1x2 1:1 1:1
+# Half Vertical Botton
+<Control><Super>Down --- 1x2 1:2 1:2
+
+# Tiles supported by GNOME by default
+
+# Half Horizontal Left
+<Super>Left
+# Half Horizontal Left
+<Super>Left
+# "Full"
+<Super>Up
+# Undo tile/Float
+<Super>Down
+
+## gTile config ##
+
+## Steam config ##
+
+- dpkg --add-architecture i386 for steam support
+	https://wiki.debian.org/Multiarch/HOWTO
+	https://wiki.debian.org/Multiarch/Implementation
+	https://wiki.debian.org/Multiarch/LibraryPathOverview
+- apt install libc6-i386
+- apt install libgl1:i386
+- apt install (--reinstall) libgl1-mesa-glx:i386
+
+## Steam config ##
+
+## ARCH Package names below (pacman -S <package_name>) ##
+# split on @ to get list of packages.
+START_OF_MANIFEST@
+perl
+sudo
+git
+meld
+nvidia
+gdm
+nautilus
+gnome-control-center
+apparmor
+vim
+qemu
