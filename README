@@ -41,16 +41,15 @@ config AppArmor or SELinux to isolate cookies and workspace folders (only select
 
 ## INSTALLATION INSTRUCTIONS FROM BACKUP ##
 
-## gTile config ##
+## GNOME Workspace config ##
 
-# Quarter
-<Control><Super>Left --- 2x2 1:1 1:1, 2:1 2:1, 1:2 1:2, 2:2, 2:2
-# Thirds
-<Control><Super>Down --- 3x1 1:1 1:1, 2:1 2:1, 3:1 3:1
-# Two Thirds
-<Control><Super>Right --- 3x1 1:1 2:1, 2:1 3:1
-# Half Vertical
-<Control><Super>Up --- 1x2 1:1 1:1, 1:2 1:2
+Accessibility -> Reduce animation = ON
+Privacy & Security -> Screen Lock -> Blank Screen Delay = 5 minutes
+Privacy & Security -> Screen Lock -> Automatic Screen Lock = ON
+Privacy & Security -> Screen Lock -> Automatic Screen Lock Delay = Screen Turns Off 
+Privacy & Security -> Screen Lock -> Lock Screen Notifications = ON
+
+... also review all options and use common sense lol.
 
 # Tiles supported by GNOME by default
 
@@ -62,6 +61,17 @@ config AppArmor or SELinux to isolate cookies and workspace folders (only select
 <Super>Up
 # Undo tile/Float
 <Super>Down
+
+# gTile extension
+
+# Quarter
+<Control><Super>Left --- 2x2 1:1 1:1, 2:1 2:1, 1:2 1:2, 2:2, 2:2
+# Thirds
+<Control><Super>Down --- 3x1 1:1 1:1, 2:1 2:1, 3:1 3:1
+# Two Thirds
+<Control><Super>Right --- 3x1 1:1 2:1, 2:1 3:1
+# Half Vertical
+<Control><Super>Up --- 1x2 1:1 1:1, 1:2 1:2
 
 ## gTile config ##
 
