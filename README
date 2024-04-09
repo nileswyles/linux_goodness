@@ -67,18 +67,6 @@ config AppArmor or SELinux to isolate cookies and workspace folders (only select
 
 ## gTile config ##
 
-## Steam config ##
-
-- dpkg --add-architecture i386 for steam support
-	https://wiki.debian.org/Multiarch/HOWTO
-	https://wiki.debian.org/Multiarch/Implementation
-	https://wiki.debian.org/Multiarch/LibraryPathOverview
-- apt install libc6-i386
-- apt install libgl1:i386
-- apt install (--reinstall) libgl1-mesa-glx:i386
-
-## Steam config ##
-
 ## ARCH Package names below (pacman -S <package_name>) ##
 # split on @ to get list of packages.
 START_OF_MANIFEST@
