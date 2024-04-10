@@ -1,7 +1,5 @@
 package ArgParse;
 
-use 5.38.2;
-
 use strict;
 use warnings;
 

@@ -1,6 +1,4 @@
-#!/bin/perl -I/scripts/perl_modules
-
-use 5.38.2;
+#!/bin/perl -I/home/floxnard7/linux_goodness/scripts/perl_modules
 
 use strict;
 use warnings;
