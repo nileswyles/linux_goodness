@@ -1,6 +1,34 @@
 #!/bin/perl
 
-if(`git status 2> /dev/null` =~ /(On branch(.|\n)*)Untracked/)
-{
-	print $1;
+# To include:
+#
+# From start of STDOUT to next empty line.
+#
+# From "Changes to be committed: "
+# 	to
+# next empty line
+#
+# From "Changes not staged for commit: "
+#	to 
+# next empty line
+#
+my @GIT_LINES = split(/\n/, `git status 2> /dev/null`);
+
+my $buffer = "";
+my $reading = 1;
+# regex?
+foreach(@GIT_LINES) {
+	if ($_ eq "") {
+		# new line dump buffer
+		print("$buffer");
+		$buffer = "";
+		$reading = 0;
+	} elsif ($_ eq "Changes to be committed:") {
+		$reading = 1;
+	} elsif ($_ eq "Changes not staged for commit:") {
+		$reading = 1;
+	}
+	if ($reading) {
+		$buffer .= "$_\n";
+	}
 }
