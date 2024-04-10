@@ -1,7 +1,8 @@
 #!/bin/perl
 
 # initialize taptun interface
-`tap-ifup tap2 br0`;
+my $INTERFACE = "tap2";
+system("sudo tap-ifup $INTERFACE br0");
 
 my $CMD = "qemu-system-x86_64 \\\n".
 	"\t-enable-kvm \\\n".

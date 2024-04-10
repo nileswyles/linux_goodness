@@ -1,7 +1,8 @@
 #!/bin/perl
 
 # initialize taptun interface
-`tap-ifup tap0 br0`;
+my $INTERFACE = "tap0";
+system("sudo tap-ifup $INTERFACE br0");
 
 my $CMD = "qemu-system-x86_64 \\\n".
 	"\t-enable-kvm \\\n".
@@ -13,7 +14,7 @@ my $CMD = "qemu-system-x86_64 \\\n".
 	"\t-boot order=c,menu=on,strict=on \\\n".
 	"\t-smbios type=0,uefi=on \\\n".
 	"\t-device virtio-vga \\\n".
-	"\t-netdev tap,id=nd0,ifname=tap0,script=no,downscript=no \\\n".
+	"\t-netdev tap,id=nd0,ifname=$INTERFACE,script=no,downscript=no \\\n".
 	"\t-device e1000,netdev=nd0 \\\n".
 	"\t-drive file=/dev/sda,index=0,media=disk,if=ide,format=raw \\\n";
 	"\t-usb \\\n".

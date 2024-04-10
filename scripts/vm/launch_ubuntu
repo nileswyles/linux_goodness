@@ -1,9 +1,8 @@
 #!/bin/perl
 
-# TODO:
-# ADD interface arg to this script... and do this separately
 # initialize taptun interface
-`tap-ifup tap1 br0`;
+my $INTERFACE = "tap1";
+system("sudo tap-ifup $INTERFACE br0");
 
 #foreach (@ARGV) {
 #	print("$_\n");
@@ -18,7 +17,7 @@ my $CMD = "qemu-system-x86_64 \\\n".
 	"\t-smp cores=2 \\\n".
 	"\t-boot order=c,menu=on,strict=on \\\n".
 	"\t-vga virtio \\\n".
-	"\t-netdev tap,id=nd0,ifname=tap1,script=no,downscript=no \\\n".
+	"\t-netdev tap,id=nd0,ifname=$INTERFACE,script=no,downscript=no \\\n".
 	"\t-device e1000,netdev=nd0 \\\n".
 	"\t-drive file=/storage/vm/ubuntu.cow,format=qcow2";
 

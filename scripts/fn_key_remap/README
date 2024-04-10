@@ -1,4 +1,8 @@
 ####
+# In conclusion, use xmodmap or similar solution lol.
+#
+
+####
 # libinput example did not work... I was able to detect input devices via udev backend but was not recieving key events.
 #  reading the device file returns inconstent data across reads for the same key sequences... so there's some ***magic*** going on there.. maybe the wrong device file?
 
