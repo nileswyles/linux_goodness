@@ -22,6 +22,11 @@ config AppArmor or SELinux to isolate cookies and workspace folders (only select
 - hardware_workspace == kicad
 - zsh because defaults aren't the fad?
 
+- symlink configuration files in linux_goodness/misc
+- copy systemd files from linux_goodness/systemd directory
+-- make sure permissions are set properly... i.e. system services should only be modifiable by root.
+
+
 - ***** see package manifest below for more details... *****
 
 ## FRESH ARCH INSTALL ##
