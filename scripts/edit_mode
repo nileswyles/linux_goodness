@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ### Usage:
 ### $1 is first terminal argument and should be either enable or disable.

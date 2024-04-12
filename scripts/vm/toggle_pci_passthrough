@@ -31,7 +31,9 @@ sub executeCmd {
 
 sub updateDeviceToDriverLinkState {
 	my ($device_id, $driver_name, $bind_state) = @_;
-	executeCmd("echo $device_id > /sys/bus/pci/drivers/$driver_name/$bind_state");
+	open(my $fh, ">", "/sys/bus/pci/drivers/$driver_name/$bind_state");
+	write($device_id);
+	close($fh);
 }
 
 sub bindVideoOrLoadDriver {

@@ -1,4 +1,4 @@
-#!/bin/perl -I/home/floxnard7/linux_goodness/scripts/perl_modules
+#!/bin/perl -I./
 
 use strict;
 use warnings;

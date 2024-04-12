@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 CAPTURE_FILE_PATH=$1
 

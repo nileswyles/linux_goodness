@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 recurseDirs() {
 	for F in $@; do 

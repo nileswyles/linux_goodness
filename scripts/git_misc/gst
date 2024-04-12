@@ -20,7 +20,7 @@ my $reading = 1;
 foreach(@GIT_LINES) {
 	if ($_ eq "") {
 		# new line dump buffer
-		print("$buffer");
+		print("$buffer\n");
 		$buffer = "";
 		$reading = 0;
 	} elsif ($_ eq "Changes to be committed:") {

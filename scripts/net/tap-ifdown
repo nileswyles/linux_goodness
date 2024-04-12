@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 CMD="ip link set "$1" down"
 echo "$CMD"

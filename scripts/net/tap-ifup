@@ -1,7 +1,13 @@
-#!/bin/perl
+#!/bin/sh
 
-my ($INTERFACE, $BRIDGE) = @ARGV;
+CMD_TUN_CREATE="ip tuntap add dev $1 mode tap"
+CMD_LINK_BR="ip link set dev $1 master $2"
+CMD_LINK_UP="ip link set $1 up"
 
-system("ip tuntap add dev $INTERFACE mode tap");
-system("ip link set dev $INTERFACE master $BRIDGE");
-system("ip link set $INTERFACE up") == 0 or exit $?;
+echo $CMD_TUN_CREATE
+echo $CMD_LINK_BR
+echo $CMD_LINK_UP
+
+exec $CMD_TUN_CREATE
+exec $CMD_LINK_BR
+exec $CMD_LINK_UP
