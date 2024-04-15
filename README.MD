@@ -73,7 +73,7 @@ or
 - [ ] add more detail
 - [ ] zsh?
 
-## ArchLinux package names
+## ArchLinux Package Names
 ```
 perl
 sudo
