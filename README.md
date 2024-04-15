@@ -55,24 +55,12 @@ or
 
 ### gTile extension
 
-- Quarter Horizontal and Vertical
+- Eighthsies
 	- <Control><Super>Left
-		- 2x2 1:1 1:1, 2:1 2:1, 1:2 1:2, 2:2, 2:2
-- Thirds Horizontal
-	- <Control><Super>Down
-		- 3x1 1:1 1:1, 2:1 2:1, 3:1 3:1
-- Two Thirds Horizontal
+		- 4x2 1:1 1:1, 1:2 1:2, 1:1 1:2, 1:1 2:1, 1:1 2:2, 2:1 2:1, 2:2 2:2, 2:1 3:1, 2:1 3:2, 3:1 3:1, 3:2 3:2, 3:1 3:2, 3:1 4:1, 3:1 4:2, 4:1 4:1, 4:2 4:2
+- Sixthsies
 	- <Control><Super>Right
-		- 3x1 1:1 2:1, 2:1 3:1
-- Half Vertical
-	- <Control><Super>Up
-		- 1x2 1:1 1:1, 1:2 1:2
-- Quarter Horizontal
-	- <Control><Super><Alt>Left
-		- 4x1 1:1 1:1, 2:1 2:1, 3:1 3:1, 4:1 4:1
-- Half Horizontal Quarter Steps
-	- <Control><Super><Alt>Down 
-		- 4x1 1:1 2:1, 2:1 3:1, 3:1 4:1
+		- 3x2 1:1 1:1, 1:2 1:2, 1:1 1:2, 1:1 2:1, 1:1 2:2, 2:1 2:1, 2:2 2:2, 2:1 2:2, 2:1 3:1, 2:1 3:2, 3:1 3:1, 3:2 3:2, 3:1 3:2
 
 ## TODO
 
