@@ -3,20 +3,17 @@
 1. create user...
 2. restore linux_goodness (Xresources, etc.)
 3. config Display Manager
-4. gdm/gnome_shell/nautilus/gnome-control-center/networkmanager?,etc... (suspend/resume works out of the box (twss, lol)?)
+	_ gdm/gnome_shell/nautilus/gnome-control-center/networkmanager?,etc... (suspend/resume works out of the box (twss, lol)?)
 or 
-5. lightdm/i3/i3lock/suspend/resume (PM/ACPI - upowerd)
-config AppArmor or SELinux to isolate cookies and workspace folders (only select applications can access those files)
-6. cookies == edge and git
-7. software_workspace == vscode, vim (xterm?)
-8. hardware_workspace == kicad
-9. zsh because defaults aren't the fad?
+	_ lightdm/i3/i3lock/suspend/resume (PM/ACPI - upowerd)
+4. config AppArmor or SELinux to isolate cookies and workspace folders (only select applications can access those files)
+	_ cookies == edge and git
+	_ software_workspace == vscode, vim (xterm?)
+	_ hardware_workspace == kicad
+5. symlink configuration files in misc, systemd and other folders to appropriate locations.
+	- make sure permissions are set properly... i.e. system services should only be accessibile by the root user.
 
-10. symlink configuration files in linux_goodness/misc
-11. copy systemd files from linux_goodness/systemd directory
-	- make sure permissions are set properly... i.e. system services should only be modifiable by root.
-
-***** see package manifest below for more details... *****
+***** see package manifest below for list of packages to install... *****
 
 ## Installation Instructions from Backup 
 
@@ -74,8 +71,9 @@ config AppArmor or SELinux to isolate cookies and workspace folders (only select
 
 - [ ] clean this up...
 - [ ] add more detail
+- [ ] zsh?
 
-## ARCH Package names below (pacman -S <package_name>) - split on ``` to get list of packages.
+## ArchLinux package names below (pacman -S <package_name>) - split on ``` to get list of packages.
 ```
 perl
 sudo
