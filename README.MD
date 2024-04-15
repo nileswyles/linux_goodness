@@ -1,25 +1,24 @@
-# Linux Goodness
+## Installation Instructions
 
-## FRESH ARCH INSTALL
-- create user...
-- restore linux_goodness (Xresources, etc.)
-- config Display Manager
-- gdm/gnome_shell/nautilus/gnome-control-center/networkmanager?,etc... (suspend/resume works out of the box (twss, lol)?)
+1. create user...
+2. restore linux_goodness (Xresources, etc.)
+3. config Display Manager
+4. gdm/gnome_shell/nautilus/gnome-control-center/networkmanager?,etc... (suspend/resume works out of the box (twss, lol)?)
 or 
-- lightdm/i3/i3lock/suspend/resume (PM/ACPI - upowerd)
+5. lightdm/i3/i3lock/suspend/resume (PM/ACPI - upowerd)
 config AppArmor or SELinux to isolate cookies and workspace folders (only select applications can access those files)
-- cookies == edge and git
-- software_workspace == vscode, vim (xterm?)
-- hardware_workspace == kicad
-- zsh because defaults aren't the fad?
+6. cookies == edge and git
+7. software_workspace == vscode, vim (xterm?)
+8. hardware_workspace == kicad
+9. zsh because defaults aren't the fad?
 
-- symlink configuration files in linux_goodness/misc
-- copy systemd files from linux_goodness/systemd directory
+10. symlink configuration files in linux_goodness/misc
+11. copy systemd files from linux_goodness/systemd directory
 	- make sure permissions are set properly... i.e. system services should only be modifiable by root.
 
 ***** see package manifest below for more details... *****
 
-## INSTALLATION INSTRUCTIONS FROM BACKUP
+## Installation Instructions from Backup 
 
 1. BOOT with live CD.
 2. Create partitions:
@@ -34,11 +33,14 @@ config AppArmor or SELinux to isolate cookies and workspace folders (only select
 
 ## GNOME config
 
-Accessibility -> Reduce animation = ON
-Privacy & Security -> Screen Lock -> Blank Screen Delay = 5 minutes
-Privacy & Security -> Screen Lock -> Automatic Screen Lock = ON
-Privacy & Security -> Screen Lock -> Automatic Screen Lock Delay = Screen Turns Off 
-Privacy & Security -> Screen Lock -> Lock Screen Notifications = ON
+- Accessibility
+	- Reduce animation = ON
+- Privacy & Security
+	- Screen Lock
+		- Blank Screen Delay = 5 minutes
+		- Automatic Screen Lock = ON
+		- Automatic Screen Lock Delay = Screen Turns Off 
+		- Lock Screen Notifications = ON
 
 ... also review all options and use common sense lol.
 
@@ -68,12 +70,13 @@ Privacy & Security -> Screen Lock -> Lock Screen Notifications = ON
 - Half Horizontal Quarter Steps
 	- <Control><Super><Alt>Down --- 4x1 1:1 2:1, 2:1 3:1, 3:1 4:1
 
-#### TODO
-- clean this up...
-- add more detail
+## TODO
 
-#### ARCH Package names below (pacman -S <package_name>) - split on @ to get list of packages.
-START_OF_MANIFEST@
+- [ ] clean this up...
+- [ ] add more detail
+
+## ARCH Package names below (pacman -S <package_name>) - split on ``` to get list of packages.
+```
 perl
 sudo
 git
@@ -85,3 +88,4 @@ gnome-control-center
 apparmor
 vim
 qemu
+```
