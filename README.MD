@@ -3,13 +3,13 @@
 1. create user...
 2. restore linux_goodness (Xresources, etc.)
 3. config Display Manager
-	_ gdm/gnome_shell/nautilus/gnome-control-center/networkmanager?,etc... (suspend/resume works out of the box (twss, lol)?)
+	- gdm/gnome_shell/nautilus/gnome-control-center/networkmanager?,etc... (suspend/resume works out of the box (twss, lol)?)
 or 
-	_ lightdm/i3/i3lock/suspend/resume (PM/ACPI - upowerd)
+	- lightdm/i3/i3lock/suspend/resume (PM/ACPI - upowerd)
 4. config AppArmor or SELinux to isolate cookies and workspace folders (only select applications can access those files)
-	_ cookies == edge and git
-	_ software_workspace == vscode, vim (xterm?)
-	_ hardware_workspace == kicad
+	- cookies == edge and git
+	- software_workspace == vscode, vim (xterm?)
+	- hardware_workspace == kicad
 5. symlink configuration files in misc, systemd and other folders to appropriate locations.
 	- make sure permissions are set properly... i.e. system services should only be accessibile by the root user.
 
