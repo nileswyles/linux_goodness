@@ -73,7 +73,7 @@ or
 - [ ] add more detail
 - [ ] zsh?
 
-## ArchLinux package names below (pacman -S <package_name>) - split on ``` to get list of packages.
+## ArchLinux package names below (pacman -S <package_name>)
 ```
 perl
 sudo
