@@ -1,24 +1,23 @@
 ## Installation Instructions
 
-1. Install Linux Distro (i.e. Arch Linux, Ubuntu, Debian, Fedora)
-1. Create user...
-2. Restore linux_goodness (Xresources, etc.)
-3. Config Display Manager
-	- gdm/gnome_shell/nautilus/gnome-control-center/networkmanager?,etc... (suspend/resume works out of the box (twss, lol)?)
-or 
+1. Install Linux Distro (i.e. Arch Linux, Ubuntu, Debian)
+2. Restore linux_goodness (scripts, etc.)
+3. Configure Display Manager
+	- gdm/gnome_shell/nautilus/gnome-control-center/networkmanager?,etc. (suspend/resume works out of the box (twss, lol))
 	- lightdm/i3/i3lock/suspend/resume (PM/ACPI - upowerd)
-4. Config AppArmor, SELinux or cleverly configure the Display Manager and launch applications from individual users to isolate cookies and workspace folders (only select applications can access those files)
-	- cookies == edge and git
-	- software_workspace == vscode, vim (xterm?)
-	- hardware_workspace == kicad
+4. Configure solution to isolate workloads (cookies and workspace folders).
+	- Leverage things like AppArmor, SELinux or even a clever user and Display Manager configuration.
+		- cookies == edge and git
+		- software_workspace == vscode, vim (xterm?)
+		- hardware_workspace == kicad
 5. Symlink configuration files in misc, systemd and other folders to appropriate locations.
-	- Make sure permissions are set properly... i.e. system services should only be accessibile by the root user.
+	- Make sure permissions are set properly. For example, system services should only be Read-Writable by the root user.
 
 ***** see package manifest below for list of packages to install... *****
 
 ## Installation Instructions from Backup 
 
-1. BOOT with live CD.
+1. Boot with live CD.
 2. Create partitions:
 	/boot
 	/
@@ -26,10 +25,10 @@ or
 3. Mount partitions (configure swap?)
 4. Extract distro tar file.
     -- tar -xvzf <tar_file>.tar.gz -C <mounted_root_dir>
-5. chroot
-6. edit grub.cfg, /etc/fstab to use new drive GUIDs
+5. Chroot
+6. Edit grub.cfg, /etc/fstab to use the new drive's GUIDs
 
-## GNOME config
+## GNOME Config
 
 - Accessibility
 	- Reduce animation = ON
@@ -42,7 +41,7 @@ or
 
 ... also review all options and use common sense lol.
 
-### Tiles supported by GNOME by default
+### Tiles Supported by GNOME by Default
 
 - Half Horizontal Left
 	- <Super>Left
@@ -53,7 +52,7 @@ or
 - Undo tile/Float
 	- <Super>Down
 
-### gTile extension
+### gTile Extension
 
 - Eighthsies
 	- \<Control\>\<Super\>Left
